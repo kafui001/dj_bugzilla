@@ -14,8 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+from django.contrib.auth.views import LogoutView
+
+from users import views as user_views
+# from core import views as core_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('signup/', user_views.UserSignUpView.as_view(), name='signup'),
+    path('', user_views.UserLogin.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+
+    # connecting roles and dashboard page directly for a more direct URL
+    
+    path('roles/',user_views.RoleView.as_view(), name='roles_home'),
+    # path('dashboard/',core_views.dashboard, name='dashboard_home'),
+
+    path('task/',include('core.urls', namespace='core')),
+    # path('ticket/',include('ticket.urls', namespace='ticket')),
+    # path('project/',include('project.urls', namespace='project')),
 ]
