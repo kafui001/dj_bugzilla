@@ -22,7 +22,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title  fw-bold" id="edittickitLabel">Edit Task</h5>
+                    <h5 class="modal-title  fw-bold" id="edittickitLabel">Edit Ticket</h5>
                 </div>
                 <div class="modal-body">
                     <div class="deadline-form">
@@ -31,7 +31,7 @@
                             {{ form.as_p }}
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-bs-dismiss="modal"><a class="text-white"
-                                        href="#">cancel</a></button>
+                                        href="{% url 'ticket:ticket_home' %}">cancel</a></button>
                                 <button type="submit" class="btn btn-primary">edit</button>
                             </div>
                         </form>

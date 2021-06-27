@@ -33,6 +33,6 @@ urlpatterns = [
     # path('dashboard/',core_views.dashboard, name='dashboard_home'),
 
     path('task/',include('core.urls', namespace='core')),
-    # path('ticket/',include('ticket.urls', namespace='ticket')),
+    path('ticket/',include('ticket.urls', namespace='ticket')),
     # path('project/',include('project.urls', namespace='project')),
 ]

@@ -1,0 +1,159 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+    <!-- sidebar -->
+   {% block content %}
+
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4"> 
+
+        <!-- Body: Header -->
+
+        <!-- Body: Body -->       
+        <div class="body d-flex py-lg-3 py-md-2">
+            <div class="container-xxl">
+                <div class="row align-items-center">
+                    <div class="border-0 mb-4">
+                        <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                            <h3 class="fw-bold mb-0">Tickets</h3>
+                            <div class="col-auto d-flex w-sm-100">
+                                <button type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#tickadd"><i class="icofont-plus-circle me-2 fs-6"></i>Create Ticket</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Row end  -->
+            
+                <div class="row clearfix g-3">
+                    <div class="col-sm-12">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                
+                                <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Ticket Id</th>
+                                            <th>Subject</th>
+                                            <th>Assigned</th> 
+                                            <th>Created Date</th> 
+                                            <th>Status</th>   
+                                            <th>Actions</th>  
+                                        </tr>
+                                    </thead>
+                                    {% for item in tickets %}
+                                    <tbody>
+                                        <tr><a href="{% url 'ticket:ticket_detail' item.pk %}">
+                                            <td>
+                                                <a href="{% url 'ticket:ticket_detail' item.pk %}" class="fw-bold text-secondary">#Tc-0002</a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'ticket:ticket_detail' item.pk %}">
+                                                    {{item.title}}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'ticket:ticket_detail' item.pk %}">
+                                                    <span class="fw-bold ms-1">{{item.creator}}</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'ticket:ticket_detail' item.pk %}">
+                                                    {{item.date_created}}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'ticket:ticket_detail' item.pk %}">
+                                                    {{item.status}}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                    <button type="button" class="btn btn-outline-secondary" ><a href="{% url 'ticket:ticket_edit' item.pk %}"><i class="icofont-edit text-success"></i></a></button>
+                                                    <button type="button" class="btn btn-outline-secondary deleterow"><a href="{% url 'ticket:ticket_delete' item.pk %}"><i class="icofont-ui-delete text-danger"></i></a></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    {% endfor%}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- Row End -->
+            </div>
+        </div>
+        
+        <!-- Modal Members-->
+        <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title  fw-bold" id="addUserLabel">Employee Invitation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="inviteby_email">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Email address" id="exampleInputEmail1" aria-describedby="exampleInputEmail1">
+                            <button class="btn btn-dark" type="button" id="button-addon2">Sent</button>
+                        </div>
+                    </div>
+                    <div class="members_list">
+                        <h6 class="fw-bold "> </h6>
+                        <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                    </div>
+                                    <div class="members-action">
+                                        <span class="members-role ">Admin</span>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="icofont-ui-settings  fs-6"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Add Ticket-->
+        <div class="modal fade" id="tickadd" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title  fw-bold" id="leaveaddLabel">Create a Ticket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="deadline-form">
+                            <form method="POST" action="{% url 'ticket:ticket_form' %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                            
+                                    {{ form.as_p }}
+                                    <div class="modal-footer">
+                                        <input type="submit" class="btn btn-primary" value='Create'>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>  
+    </div>
+</div>
+
+{% endblock content %}

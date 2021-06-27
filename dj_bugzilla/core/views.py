@@ -4,7 +4,7 @@ from django.views.generic import CreateView, FormView, DetailView, UpdateView, D
 from django.urls import reverse_lazy
 
 from .models import Task
-from .forms import TaskForm
+from .forms import TaskForm, TaskEditForm
 
 #Create your views here.
 
@@ -29,34 +29,35 @@ class TaskView(FormView):
         return context
 
 #     # limit task creation to only admin and project manager
-#     def form_valid(self, form):
-#         form = form.save(commit=False)
-#         if self.request.user.is_project_manager or self.request.user.is_superuser:
-#             form.creator = self.request.user
-#             form.save()
-#             print(form.creator)
-#             print(form.priority)
-#             return super(TaskView, self).form_valid(form)
-#         else:
-#             print("you are not authorized to create a task")
+    def form_valid(self, form):
+        form = form.save(commit=False)
+        if self.request.user.is_project_manager or self.request.user.is_superuser:
+            form.creator = self.request.user
+            form.status = 'open'
+            form.save()
+            print(form.creator)
+            print(form.priority)
+            return super(TaskView, self).form_valid(form)
+        else:
+            print("you are not authorized to create a task")
 #             # fix this section
 
 
-# class TaskDetailView(DetailView):
-#     model = Task
-#     # context_object_name = 'task'
-#     template_name = 'core/task_detail.html'
+class TaskDetailView(DetailView):
+    model = Task
+    # context_object_name = 'task'
+    template_name = 'core/task_detail.html'
 
 
-# class TaskEditView(UpdateView):
-#     model = Task
-#     form_class = TaskEditForm
-#     template_name = 'core/task_edit.html'
-#     success_url = reverse_lazy('core:task')
+class TaskEditView(UpdateView):
+    model = Task
+    form_class = TaskEditForm
+    template_name = 'core/task_edit.html'
+    success_url = reverse_lazy('core:task')
 
 
-# class TaskDeleteView(DeleteView):
-#     model = Task
-#     context_object_name = 'task'
-#     template_name = 'core/task_delete.html'
-#     success_url = reverse_lazy('core:task')
+class TaskDeleteView(DeleteView):
+    model = Task
+    context_object_name = 'task'
+    template_name = 'core/task_delete.html'
+    success_url = reverse_lazy('core:task')

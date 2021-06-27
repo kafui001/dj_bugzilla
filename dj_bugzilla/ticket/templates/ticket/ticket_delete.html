@@ -1,38 +1,27 @@
 {% extends 'core/base.html' %}
 {% load static %}
-<!-- sidebar -->
 {% block content %}
 
-<!-- main body area -->
 <div class="main px-lg-4 px-md-4">
-
-    <!-- Body: Header -->
-
-    <!-- Body: Body -->
-    
-
-    <!-- Modal Members-->
-    
-
-    <!-- Add Ticket-->
-    
-
-    <!-- Edit Tickit-->
     <div>
         <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title  fw-bold" id="edittickitLabel">Edit Task</h5>
+                    <h5 class="modal-title  fw-bold" id="edittickitLabel">Delete Ticket</h5>
                 </div>
                 <div class="modal-body">
                     <div class="deadline-form">
                         <form method="POST" action="">
+                            <div class='justify-content-center flex-column d-flex'>
                             {% csrf_token %}
-                            {{ form.as_p }}
+                            <h4>this action will permanently delete... <span class="text-danger">{{ ticket.title }}</span></h4>
+                            <!-- <h3>{{ task.title }}</h3> -->
+                            <i class="icofont-ui-delete text-danger display-2 text-center mt-2 mb-4"></i>
+                        </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-bs-dismiss="modal"><a class="text-white"
-                                        href="#">cancel</a></button>
-                                <button type="submit" class="btn btn-primary">edit</button>
+                                        href="{% url 'ticket:ticket_home' %}">cancel</a></button>
+                                <button type="submit" class="btn btn-danger text-white">delete</button>
                             </div>
                         </form>
                     </div>

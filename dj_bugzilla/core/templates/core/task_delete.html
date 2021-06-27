@@ -1,4 +1,4 @@
-{% extends 'bug/base.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
 
@@ -39,7 +39,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-bs-dismiss="modal"><a class="text-white"
-                                        href="{% url 'bug:task' %}">cancel</a></button>
+                                        href="{% url 'core:task' %}">cancel</a></button>
                                 <button type="submit" class="btn btn-danger text-white">delete</button>
                             </div>
                         </form>
