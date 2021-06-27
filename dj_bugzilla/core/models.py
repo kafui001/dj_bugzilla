@@ -1,3 +1,5 @@
+import random
+
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
@@ -96,6 +98,7 @@ class TaskStatus(models.Model):
 
 
 class Ticket(models.Model):
+    ticket_id          = models.CharField(max_length=6, default='', unique=True)
     title              = models.CharField(max_length=150)
     description        = models.TextField()
     creator            = models.ForeignKey(BugUser,on_delete=models.SET_NULL, null=True,related_name='ticket_author')
@@ -105,3 +108,15 @@ class Ticket(models.Model):
     # project            = models.CharField(max_length=50)
     date_created       = models.DateField(auto_now_add=True)
     date_resolved      = models.DateField(auto_now_add=True)
+
+
+    def save(self, *args, **kwargs):
+        while True:
+            id = random.randint(10000,99999)
+            if Ticket.objects.filter(ticket_id=id).count() == 0:
+                break 
+        self.ticket_id = id 
+        return super(Ticket, self).save(*args, **kwargs)    
+
+
+

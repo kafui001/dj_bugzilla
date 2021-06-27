@@ -43,7 +43,9 @@
                                     <tbody>
                                         <tr><a href="{% url 'ticket:ticket_detail' item.pk %}">
                                             <td>
-                                                <a href="{% url 'ticket:ticket_detail' item.pk %}" class="fw-bold text-secondary">#Tc-0002</a>
+                                                <a href="{% url 'ticket:ticket_detail' item.pk %}" class="fw-bold text-secondary">
+                                                    #tc-{{item.ticket_id}}
+                                                </a>
                                             </td>
                                             <td>
                                                 <a href="{% url 'ticket:ticket_detail' item.pk %}">

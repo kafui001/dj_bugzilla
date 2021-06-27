@@ -35,8 +35,6 @@ class TaskView(FormView):
             form.creator = self.request.user
             form.status = 'open'
             form.save()
-            print(form.creator)
-            print(form.priority)
             return super(TaskView, self).form_valid(form)
         else:
             print("you are not authorized to create a task")
