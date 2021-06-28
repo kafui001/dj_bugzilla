@@ -75,11 +75,59 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    {% endfor%}
+                                    {% endfor%}                                    
                                 </table>
+                                <div class="row mt-4">
+                                    <!-- <div class="col-sm-12 col-md-5">
+                                        <div class="dataTables_info" id="myProjectTable_info" role="status" aria-live="polte">Showing 1 to 6</div>
+                                    </div> -->
+                                    <div class="col-sm-12 col-md-7">
+                                        <div class="dataTables_paginate paging_simple_numbers" id="myProjectTable_paginate">
+                                            {% if is_paginated %}
+                                                <ul class="pagination">
+                                                    {% if page_obj.has_previous %}
+                                                        <li class="paginate_button page-item previous" id="myProjectTable_previous">
+                                                            <a href="?page={{page_obj.previous_page_number}}" aria-controls="myProjectTable" data-dt-idx="0" tabindex="0" class="page-link">prev</a>
+                                                        </li>
+                                                    {% else %}
+                                                        <li class="paginate_button page-item previous disabled" id="myProjectTable_previous">
+                                                            <a href="#" aria-controls="myProjectTable" data-dt-idx="0" tabindex="0"
+                                                                class="page-link">prev</a>
+                                                        </li>
+                                                    {% endif %}
+
+                                                    {% for i in paginator.page_range %}
+                                                        {% if page_obj.number == i %}
+                                                            <li class="paginate_button page-item active">
+                                                                <a href="#" aria-controls="myProjectTable" data-dt-idx="1" tabindex="0" class="page-link">{{ i }}</a>
+                                                            </li>
+                                                        {% else %}
+                                                            <li class="paginate_button page-item">
+                                                                <a href="?page={{ i }}" aria-controls="myProjectTable" data-dt-idx="1" tabindex="0" class="page-link">{{ i }}</a>
+                                                            </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                    {% if page_obj.has_next %}
+                                                        <li class="paginate_button page-item next" id="myProjectTable_next">
+                                                            <a href="?page={{page_obj.next_page_number}}" aria-controls="myProjectTable" data-dt-idx="2" tabindex="0" class="page-link">next</a>
+                                                        </li>
+                                                    {% else %}
+                                                        <li class="paginate_button page-item next disabled" id="myProjectTable_next">
+                                                            <a href="#" aria-controls="myProjectTable" data-dt-idx="2" tabindex="0" class="page-link">next</a>
+                                                        </li>
+                                                    {% endif %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--row -->
                             </div>
+                            
                         </div>
                     </div>
+                    
                 </div><!-- Row End -->
             </div>
         </div>
