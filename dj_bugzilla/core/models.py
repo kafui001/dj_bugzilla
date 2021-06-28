@@ -109,14 +109,16 @@ class Ticket(models.Model):
     date_created       = models.DateField(auto_now_add=True)
     date_resolved      = models.DateField(auto_now_add=True)
 
+    # MOVED THIS FEATURE BELOW TO form_valid of TicketFormView cos saving an edited 
+    # ticket would create a new ticket no. if its left in the model
 
-    def save(self, *args, **kwargs):
-        while True:
-            id = random.randint(10000,99999)
-            if Ticket.objects.filter(ticket_id=id).count() == 0:
-                break 
-        self.ticket_id = id 
-        return super(Ticket, self).save(*args, **kwargs)    
+    # def save(self, *args, **kwargs):
+    #     while True:
+    #         id = random.randint(10000,99999)
+    #         if Ticket.objects.filter(ticket_id=id).count() == 0:
+    #             break 
+    #     self.ticket_id = id 
+    #     return super(Ticket, self).save(*args, **kwargs)    
 
 
 

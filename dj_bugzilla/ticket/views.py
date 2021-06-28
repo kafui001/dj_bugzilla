@@ -30,11 +30,17 @@ class TicketFormView(FormView):
         form = form.save(commit=False)
         form.creator = self.request.user
         form.status = 'open'
+
+        # creating a ticket number for ticket instance
+        while True:
+            id = random.randint(10000,99999)
+            if Ticket.objects.filter(ticket_id=id).count() == 0:
+                break 
+        form.ticket_id = id 
         form.save()
 
         return super(TicketFormView, self).form_valid(form)
-
-
+ 
 class TicketDetailView(DetailView):
     model = Ticket
     template_name = 'ticket/ticket_detail.html'
