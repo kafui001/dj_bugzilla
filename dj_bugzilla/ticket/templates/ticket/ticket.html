@@ -133,7 +133,7 @@
         </div>
         
         <!-- Modal Members-->
-        <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+        <!-- <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -177,7 +177,7 @@
                 </div>
             </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Add Ticket-->
         <div class="modal fade" id="tickadd" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
@@ -189,11 +189,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="deadline-form">
-                            <form method="POST" action="{% url 'ticket:ticket_form' %}">
+                            <form method="POST" enctype="multipart/form-data" action="{% url 'ticket:ticket_form' %}">
                                 {% csrf_token %}
-                                <div class="mb-3">
-                            
                                     {{ form.as_p }}
+
+                                    <div class="form-group mt-3">
+                                        <label>add an image (optional)</label>
+                                        <div class="mt-2">
+                                            <input name="image" type="file" class="form-control-file">
+                                        </div>
+                                    </div>
+
                                     <div class="modal-footer">
                                         <input type="submit" class="btn btn-primary" value='Create'>
                                     </div>

@@ -133,10 +133,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 AUTH_USER_MODEL = 'core.BugUser'
 
 LOGIN_URL = "/signup"
+
+
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = BASE_DIR / 'static/images'

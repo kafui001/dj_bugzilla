@@ -2,7 +2,7 @@ from django import forms
 # from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from core.models import BugUser, Administrator, ProjectManager, Developer
+from core.models import BugUser, Administrator, ProjectManager, Developer, AllImage
 
 assign_admin = BugUser.objects.filter(is_superuser=False).values_list('username','username')
 admin_list = []
@@ -17,7 +17,11 @@ for user in assign_pm:
     pm_list.append(user)
 
 
-
+# feature for assigning developer to a ticket in ticket_detail.html
+assign_dev_ticket = BugUser.objects.filter(is_developer=True).values_list('username','username')
+dev_ticket_list = []
+for user in assign_dev_ticket:
+    dev_ticket_list.append(user)
 
 assign_dev = BugUser.objects.filter(is_developer=False).values_list('username','username')
 dev_list = []
@@ -86,6 +90,20 @@ class DevForm(forms.ModelForm):
 
         widgets = {
             'username': forms.Select(choices=dev_list, attrs={
+                'class': 'form-control',
+                }
+            )
+        }
+
+
+# feature for assigning developer to a ticket in ticket_detail.html
+class DevTicketForm(forms.ModelForm):
+    class Meta:
+        model  = Developer
+        fields = ['username']
+
+        widgets = {
+            'username': forms.Select(choices=dev_ticket_list, attrs={
                 'class': 'form-control',
                 }
             )

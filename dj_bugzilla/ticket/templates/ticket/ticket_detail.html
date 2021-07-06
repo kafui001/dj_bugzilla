@@ -1,4 +1,4 @@
-<!doctype html>
+
 {% extends 'core/base.html' %}
 {% load static %}
 
@@ -28,7 +28,7 @@
                 <div class="row g-3">
                     <div class="col-xxl-8 col-xl-8 col-lg-12 col-md-12">
                         <div class="row g-3 mb-3">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="card ">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="card ">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="card ">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
@@ -70,12 +70,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- {% if ticket.assigned_to %}
                             <div class="col-md-3">
                                 <div class="card ">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar lg  rounded-1 no-thumbnail bg-lightyellow color-defult"><i
-                                                    class="icofont-optic fs-4"></i></div>
+                                                
                                             <div class="flex-fill ms-4 text-truncate">
                                                 <div class="text-truncate">Assigned To</div>
                                                 <span class="badge bg-warning">{{ticket.assigned_to}}</span>
@@ -85,16 +85,39 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %} -->
                         </div> <!-- Row end  -->
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <div class="card mb-3">
                                     <div class="card-body">
-                                        <h6 class="fw-bold mb-3 text-danger">{{ticket.title}}</h6>
                                         
+                                        <h6 class="fw-bold mb-3 text-danger">{{ticket.title}}</h6>
+                                        <h5>Ticket Description</h5>
                                         <p>{{ticket.description}}</p>
                                     </div> 
                                 </div>
+
+                                <div class="modal-content mb-3">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Developer</h5>
+                                        <a href="#" class="btn btn-primary">Switch Assigned Developer</a>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                        <div class="deadline-form">
+                                            <form method="POST" action="">
+                                                {% csrf_token %}
+                                                {{ form.as_p }}
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Assign Ticket</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+
                                 <div class="row g-3">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="card">
@@ -111,30 +134,122 @@
                                         </div>
                                         
                                     </div>
+                                    
                                     <div class="col-lg-6 col-md-6">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h6 class="fw-bold mb-3 text-dark">Assign Ticket</h6>
+                                                <h6 class="fw-bold mb-3 text-dark">Ticket Assigned to</h6>
                                                 <div class="flex-grow-1">
                                                     <div class="py-2 d-flex align-items-center border-bottom">
                                                         <div class="d-flex ms-3 align-items-center flex-fill">
-                                                            <span class="avatar lg bg-lightgreen rounded-circle text-center d-flex align-items-center justify-content-center"><i class="icofont-file-pdf fs-5"></i></span>
-                                                            <div class="d-flex flex-column ps-3">
-                                                                <h6 class="fw-bold mb-0 small-14">file1.pdf</h6> 
+                                                            
+                                                            <div class="flex-fill ms-4 text-truncate">
+                                                                <span>{{ticket.assigned_to}}</span>
                                                             </div>
                                                         </div>
-                                                        <button type="button" class="btn bg-lightgreen text-end">Download</button>
                                                     </div>
-
-                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- {% if ticket.assigned_to == False %} -->
+                                    <!-- <div class="col-md-2"> -->
+                                        <div class="card ">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-fill ms-4 text-truncate">
+                                                        <div class="text-truncate">Assigned To</div>
+                                                        <span class="badge bg-warning">{{ticket.assigned_to}}</span>
+                                                    </div>
+                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- </div> -->
+                                    <!-- {% endif %} -->
+                                        
+                                    <!-- ##### -->
+
+                                    <div class="row g-3">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="fw-bold mb-3 text-danger">Bug Image Atteched</h6>
+                                                    <div class="flex-grow-1">
+                                                        <div class="py-2 d-flex align-items-center border-bottom">
+                                                            <div class="d-flex ms-3 align-items-center flex-fill">
+                                                                <span
+                                                                    class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
+                                                                        class="icofont-bug fs-5"></i></span>
+                                                                <div class="d-flex flex-column ps-3">
+                                                                    <h6 class="fw-bold mb-0 small-14">Image3.jpg</h6>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button" class="btn btn-primary"><a href="#" class="text-white">view image</a></button>
+                                                        </div>
+                                                        <!-- <div class="py-2 d-flex align-items-center border-bottom">
+                                                            <div class="d-flex ms-3 align-items-center flex-fill">
+                                                                <span
+                                                                    class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
+                                                                        class="icofont-bug fs-5"></i></span>
+                                                                <div class="d-flex flex-column ps-3">
+                                                                    <h6 class="fw-bold mb-0 small-14">Image4.jpg</h6>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button" class="btn light-danger-bg text-end">Download</button>
+                                                        </div>
+                                                        <div class="py-2 d-flex align-items-center border-bottom">
+                                                            <div class="d-flex ms-3 align-items-center flex-fill">
+                                                                <span
+                                                                    class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
+                                                                        class="icofont-bug fs-5"></i></span>
+                                                                <div class="d-flex flex-column ps-3">
+                                                                    <h6 class="fw-bold mb-0 small-14">Image6.jpg</h6>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button" class="btn light-danger-bg text-end">Download</button>
+                                                        </div>
+                                                        <div class="py-2 d-flex align-items-center border-bottom">
+                                                            <div class="d-flex ms-3 align-items-center flex-fill">
+                                                                <span
+                                                                    class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
+                                                                        class="icofont-bug fs-5"></i></span>
+                                                                <div class="d-flex flex-column ps-3">
+                                                                    <h6 class="fw-bold mb-0 small-14">Image11.jpg</h6>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button" class="btn light-danger-bg text-end">Download</button>
+                                                        </div>
+                                                        <div class="py-2 d-flex align-items-center">
+                                                            <div class="d-flex ms-3 align-items-center flex-fill">
+                                                                <span
+                                                                    class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
+                                                                        class="icofont-bug fs-5"></i></span>
+                                                                <div class="d-flex flex-column ps-3">
+                                                                    <h6 class="fw-bold mb-0 small-14">Image5.jpg</h6>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button" class="btn light-danger-bg text-end">Download</button>
+                                                        </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    
+                                        </div>
+                                        <!--  -->
+                                    </div> 
+
+                                    
                                 </div>
                             </div>
                         </div> <!-- Row end  -->
                     </div>
+                    <!-- ############### -->
+
+                    
+
+
                     <div class="col-xxl-4 col-xl-4 col-lg-12 col-md-12">
                         <div class="card">
                             <div class="card-body card-body-height py-4">
@@ -198,8 +313,14 @@
                             </div>
                         </div>
                     </div>
+
+                    
                 </div>
+
+                <!-- ###### -->
             </div>
+
+            
         </div>
         
         <!-- Modal Members-->

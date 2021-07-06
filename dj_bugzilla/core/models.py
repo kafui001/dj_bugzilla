@@ -46,9 +46,9 @@ class ProjectManager(models.Model):
 
 
 class Developer(models.Model):
-    username  = models.CharField(max_length=150)
-    project_manager   = models.ForeignKey(ProjectManager, on_delete=models.SET_NULL, null=True,blank=True, related_name='dev_pm')
-    admin             = models.ForeignKey(Administrator,on_delete=models.SET_NULL,null=True, related_name='dev_admin')
+    username          = models.CharField(max_length=150)
+    assigner          = models.ForeignKey(BugUser,on_delete=models.SET_NULL, null=True,related_name='dev_assigner')
+    
 
     def __str__(self):
         return self.username
@@ -59,8 +59,8 @@ class Task(models.Model):
     creator            = models.ForeignKey(BugUser,on_delete=models.SET_NULL, null=True,related_name='task_author')
     developer_assigned = models.ForeignKey(Developer,on_delete=models.SET_NULL, null=True,blank=True,related_name='task_developer')
     date_created       = models.DateField(auto_now_add=True)
-    date_assigned      = models.DateField(auto_now_add=True)
-    date_completed     = models.DateField(auto_now_add=True)
+    date_assigned      = models.DateField(auto_now=True)
+    date_completed     = models.DateField(auto_now=True)
     status             = models.CharField(max_length=255)
     priority           = models.CharField(max_length=255)
     project            = models.CharField(max_length=255)
@@ -107,18 +107,25 @@ class Ticket(models.Model):
     status             = models.CharField(max_length=50)
     # project            = models.CharField(max_length=50)
     date_created       = models.DateField(auto_now_add=True)
-    date_resolved      = models.DateField(auto_now_add=True)
+    date_resolved      = models.DateField(auto_now=True)
+    allimages          = models.ManyToManyField('Allimage', through='TicketImage')
+   
 
-    # MOVED THIS FEATURE BELOW TO form_valid of TicketFormView cos saving an edited 
-    # ticket would create a new ticket no. if its left in the model
+class AllImage(models.Model):
+    title        = models.CharField(max_length=50) 
+    description  = models.TextField()
+    image        = models.ImageField(null=True, blank=True)
+    date_created = models.DateField(auto_now_add=True)
+    tickets       = models.ManyToManyField('Ticket',through='TicketImage')
 
-    # def save(self, *args, **kwargs):
-    #     while True:
-    #         id = random.randint(10000,99999)
-    #         if Ticket.objects.filter(ticket_id=id).count() == 0:
-    #             break 
-    #     self.ticket_id = id 
-    #     return super(Ticket, self).save(*args, **kwargs)    
+
+class TicketImage(models.Model):
+    allimage     = models.ForeignKey(AllImage,on_delete=models.CASCADE)
+    ticket       = models.ForeignKey(Ticket,on_delete=models.CASCADE)
+    
+
+    
+
 
 
 
