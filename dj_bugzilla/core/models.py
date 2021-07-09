@@ -108,20 +108,27 @@ class Ticket(models.Model):
     # project            = models.CharField(max_length=50)
     date_created       = models.DateField(auto_now_add=True)
     date_resolved      = models.DateField(auto_now=True)
-    allimages          = models.ManyToManyField('Allimage', through='TicketImage')
+    
    
 
 class AllImage(models.Model):
-    title        = models.CharField(max_length=50) 
-    description  = models.TextField()
-    image        = models.ImageField(null=True, blank=True)
-    date_created = models.DateField(auto_now_add=True)
-    tickets       = models.ManyToManyField('Ticket',through='TicketImage')
+    ticket = models.ForeignKey(Ticket, related_name='img_ticket', on_delete=models.CASCADE, default=1)
+    image  = models.ImageField(null=True, blank=True)
 
 
-class TicketImage(models.Model):
-    allimage     = models.ForeignKey(AllImage,on_delete=models.CASCADE)
-    ticket       = models.ForeignKey(Ticket,on_delete=models.CASCADE)
+class Comment(models.Model):
+    ticket = models.ForeignKey(Ticket,related_name='comment_ticket',on_delete=models.CASCADE)
+    author = models.ForeignKey(BugUser,related_name='comment_author',on_delete=models.CASCADE)
+    body = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body[:10]
+    
+    
+
+
+
     
 
     

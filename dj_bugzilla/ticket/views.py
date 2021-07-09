@@ -1,11 +1,12 @@
 import random
 
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.views.generic.edit import FormMixin
 from django.views.generic import ListView, FormView, DetailView, UpdateView, DeleteView
 
-from .forms import TicketForm, TicketEditForm
-from core.models import Ticket, Developer, AllImage, TicketImage
+from .forms import TicketForm, TicketEditForm, CommentForm
+from core.models import Ticket, Developer, AllImage, Comment
 from users.forms import DevTicketForm
 # Create your views here.
 
@@ -43,13 +44,14 @@ class TicketFormView(FormView):
             if Ticket.objects.filter(ticket_id=id).count() == 0:
                 break 
         form.ticket_id = id 
-        
-        save_new_image = AllImage.objects.create(
-            image = new_image
-        )
         form.save()
 
-        new_ticketImage = TicketImage.objects.create(ticket=form,allimage=save_new_image,)
+        save_new_image = AllImage.objects.create(
+            ticket = form,
+            image = new_image
+        )
+        # save_new_image.ticket.add(form)
+        # new_ticketImage = TicketImage.objects.create(ticket=form,allimage=save_new_image,)
 
         return super(TicketFormView, self).form_valid(form)
  
@@ -60,9 +62,57 @@ class TicketDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TicketDetailView, self).get_context_data(**kwargs)
-        context['form'] = DevTicketForm()
-        context['image'] = Ticket.tickets.values()
+        context['form']         = DevTicketForm()
+        context['comment_form'] = CommentForm()
+        context['image']        = AllImage.objects.all()
+        context['all_comments'] = Comment.objects.all()
         return context
+
+# class CommentFormWork(FormView):
+#     model       = Comment
+#     form_class  = CommentForm
+#     # success_url = reverse_lazy('ticket:ticket_detail')
+#     def get_success_url(self):
+#         return reverse('ticket:ticket_detail', kwargs={'pk': self.object.pk})
+
+#     def post(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         form = self.get_form()
+#         if form.is_valid():
+#             return self.form_valid(form)
+#         else:
+#             return self.form_invalid(form) 
+
+
+
+#     def form_valid(self, form):
+#         form        = form.save(commit=False)
+#         form.author = self.request.user
+#         form.save()
+
+#         return super(TicketDetailView, self).form_valid(form)
+
+
+# class ViewPhoto(DetailView):
+#     model               = AllImage
+#     template_name       = 'ticket/image.html'
+#     context_object_name = 'photo'
+
+    # def get_context_data(self, **kwargs):
+    #     context          = super(ViewPhoto, self).get_context_data(**kwargs)
+    #     context['photo'] = AllImage.objects.get(id=self.id)
+    #     return context
+
+# class ViewImage(DetailView):
+#     model               = AllImage
+#     template_name       = 'ticket/image.html'
+
+#     def get_context_data(self, **kwargs):
+#         id = self.request.GET.get('name')
+#         context = super(ViewImage, self).get_context_data(**kwargs)
+#         context['image'] = AllImage.objects.get(id=id)
+#         # context['image'] = AllImage.objects.all()
+#         return context
 
 
 class TicketEditView(UpdateView):

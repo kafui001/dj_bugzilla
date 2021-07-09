@@ -3,7 +3,7 @@ import random
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 # from .models import ProjectManager, Developer, Task
-from core.models import Ticket,TaskPriority, TaskStatus
+from core.models import Ticket,TaskPriority, TaskStatus, Comment
 
 
 # assign_developers = Developer.objects.all().values_list('name','name')
@@ -92,5 +92,24 @@ class TicketEditForm(forms.ModelForm):
                 'aria-label':"",
                 }
             ),
+
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = [
+            'body'
+        ]
+
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder':'Leave a comment here',
+                'id':"commentForm",
+                'rows':"5"
+                }
+            )
 
         }
