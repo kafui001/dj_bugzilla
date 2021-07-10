@@ -1,13 +1,13 @@
 import random
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic.edit import FormMixin
-from django.views.generic import ListView, FormView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView
 
 from .forms import TicketForm, TicketEditForm, CommentForm
 from core.models import Ticket, Developer, AllImage, Comment
 from users.forms import DevTicketForm
+
 # Create your views here.
 
 class TicketHomeView(ListView):
@@ -30,10 +30,8 @@ class TicketFormView(FormView):
 
     def form_valid(self, form):
         form         = TicketForm(self.request.POST)
-        new_image    = self.request.FILES.get('image')
-        print('#########')
-        print(new_image)
-        print('#########')
+        new_image    = self.request.FILES.get('image') 
+
         form         = form.save(commit=False)
         form.creator = self.request.user
         form.status  = 'open'
@@ -57,62 +55,34 @@ class TicketFormView(FormView):
  
 class TicketDetailView(DetailView):
     model               = Ticket
+    form_class          = TicketForm
     template_name       = 'ticket/ticket_detail.html'
     context_object_name = 'ticket'
+    
 
     def get_context_data(self, **kwargs):
         context = super(TicketDetailView, self).get_context_data(**kwargs)
-        context['form']         = DevTicketForm()
-        context['comment_form'] = CommentForm()
+        context['form']         = DevTicketForm
+        context['comment_form'] = CommentForm
         context['image']        = AllImage.objects.all()
         context['all_comments'] = Comment.objects.all()
         return context
 
-# class CommentFormWork(FormView):
-#     model       = Comment
-#     form_class  = CommentForm
-#     # success_url = reverse_lazy('ticket:ticket_detail')
-#     def get_success_url(self):
-#         return reverse('ticket:ticket_detail', kwargs={'pk': self.object.pk})
+ 
+ 
+# submitted comment from ticket_detail.html
+class CommentFormWork(CreateView):
+    model       = Comment
+    form_class  = CommentForm
+    def get_success_url(self):
+        return reverse_lazy('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']})
 
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         form = self.get_form()
-#         if form.is_valid():
-#             return self.form_valid(form)
-#         else:
-#             return self.form_invalid(form) 
-
-
-
-#     def form_valid(self, form):
-#         form        = form.save(commit=False)
-#         form.author = self.request.user
-#         form.save()
-
-#         return super(TicketDetailView, self).form_valid(form)
-
-
-# class ViewPhoto(DetailView):
-#     model               = AllImage
-#     template_name       = 'ticket/image.html'
-#     context_object_name = 'photo'
-
-    # def get_context_data(self, **kwargs):
-    #     context          = super(ViewPhoto, self).get_context_data(**kwargs)
-    #     context['photo'] = AllImage.objects.get(id=self.id)
-    #     return context
-
-# class ViewImage(DetailView):
-#     model               = AllImage
-#     template_name       = 'ticket/image.html'
-
-#     def get_context_data(self, **kwargs):
-#         id = self.request.GET.get('name')
-#         context = super(ViewImage, self).get_context_data(**kwargs)
-#         context['image'] = AllImage.objects.get(id=id)
-#         # context['image'] = AllImage.objects.all()
-#         return context
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.ticket_id = self.kwargs['pk']
+        
+        return super().form_valid(form)
+       
 
 
 class TicketEditView(UpdateView):
@@ -121,8 +91,12 @@ class TicketEditView(UpdateView):
     template_name = 'ticket/ticket_edit.html'
     success_url   = reverse_lazy('ticket:ticket_home')
 
+
+
 class TicketDeleteView(DeleteView):
     model               = Ticket
     context_object_name = 'ticket'
     template_name       = 'ticket/ticket_delete.html'
     success_url         = reverse_lazy('ticket:ticket_home')
+
+

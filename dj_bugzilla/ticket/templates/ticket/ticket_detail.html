@@ -220,7 +220,7 @@
                                                 <div class="post">
                                                     <!-- <textarea class="form-control" placeholder="Post" rows="4"></textarea> -->
                                                     
-                                                    <form method="POST" action="">
+                                                    <form method="POST" action="{%url 'ticket:comment_form' object.id%}">
                                                         {% csrf_token %}
                                                         {{ comment_form.as_p }}
                                                         <!-- <div class="modal-footer"> -->
@@ -238,7 +238,7 @@
                                                         <a class="me-lg-4 me-4 text-primary" href="#">
                                                             <i class="icofont-speech-comments"></i> Comments ()</a>
                                                     </div>
-                                                    {%for comment in ticket.comment_ticket.all%}
+                                                    {%for comment in ticket.ticket_comment.all%}
                                                     <div class="d-flex mb-2">
                                                         <div class="flex-fill ms-1 text-truncate">
                                                             <small class="mb-0"><span>{{comment.author.username}}</span> | <span class="text-muted">{{comment.date_created}}</span></small>
@@ -276,7 +276,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="deadline-form">
-                            {% if not ticket.img_ticket.all %}
+                            {% if ticket.img_ticket.all == None %}
                                 <h6>No image associated with this ticket</h6>
                             {% else %}
                                 {% for img in ticket.img_ticket.all %}

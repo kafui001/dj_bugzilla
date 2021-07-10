@@ -108,17 +108,17 @@ class Ticket(models.Model):
     # project            = models.CharField(max_length=50)
     date_created       = models.DateField(auto_now_add=True)
     date_resolved      = models.DateField(auto_now=True)
-    
+                 
    
 
 class AllImage(models.Model):
-    ticket = models.ForeignKey(Ticket, related_name='img_ticket', on_delete=models.CASCADE, default=1)
+    ticket = models.ForeignKey(Ticket, related_name='img_ticket', on_delete=models.CASCADE,null=True)
     image  = models.ImageField(null=True, blank=True)
 
 
 class Comment(models.Model):
-    ticket = models.ForeignKey(Ticket,related_name='comment_ticket',on_delete=models.CASCADE)
-    author = models.ForeignKey(BugUser,related_name='comment_author',on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket,related_name='ticket_comment',on_delete=models.CASCADE,null=True)
+    author = models.ForeignKey(BugUser,related_name='comment_author',on_delete=models.CASCADE,null=True)
     body = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
 
