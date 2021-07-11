@@ -7,7 +7,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 
 from .forms import UserSignUpForm, LoginForm, AdminForm, PmForm, DevForm
-from core.models import Administrator
+from core.models import Administrator, BugUser
 
 class UserSignUpView(View):
     
@@ -54,7 +54,7 @@ class UserLogin(FormView):
 #     }
 #     return render(request, 'bug/roles.html',context)
 
-class RoleView(FormView):
+class RoleView(CreateView):
     model         = Administrator
     form_class    = AdminForm
     template_name = 'users/roles.html'
@@ -65,4 +65,12 @@ class RoleView(FormView):
         context['pm_form'] = PmForm
         context['dev_form'] = DevForm
         return context
+
+    def form_valid(self, form):
+        user = form.instance.username
+        print(user)
+        user = BugUser.objects.filter(username=user)
+        user.update(is_superuser=True)
+    
+        return super(RoleView, self).form_valid(form)
     

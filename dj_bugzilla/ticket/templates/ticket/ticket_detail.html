@@ -276,12 +276,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="deadline-form">
-                            {% if ticket.img_ticket.all == None %}
+                            {% if ticket.img_ticket == None %}
                                 <h6>No image associated with this ticket</h6>
                             {% else %}
-                                {% for img in ticket.img_ticket.all %}
+                                {% if ticket.img_ticket %}
                                     <img src="{{img.image.url}}">
-                                {% endfor %}
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
