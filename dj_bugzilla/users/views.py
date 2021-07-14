@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, CreateView, View
 from django.contrib.auth import login, logout
 from django.views import View
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 
-from .forms import UserSignUpForm, LoginForm, AdminForm, PmForm, DevForm
-from core.models import Administrator, BugUser
+# from .forms import UserSignUpForm, LoginForm, AdminForm, PmForm, DevForm
+from .forms import UserSignUpForm, LoginForm
+
+from core.models import Administrator, BugUser,Developer, ProjectManager
 
 class UserSignUpView(View):
     
@@ -48,29 +50,81 @@ class UserLogin(FormView):
             return self.form_invalid(form)
 
 
-# ROLES
-# def roles(request):
-#     context = {
-#     }
-#     return render(request, 'bug/roles.html',context)
 
-class RoleView(CreateView):
-    model         = Administrator
-    form_class    = AdminForm
-    template_name = 'users/roles.html'
-    success_url = reverse_lazy('roles_home')
 
-    def get_context_data(self, **kwargs):
-        context = super(RoleView, self).get_context_data(**kwargs)
-        context['pm_form'] = PmForm
-        context['dev_form'] = DevForm
-        return context
+class RoleView(View):
+    def get(self, request, *args,**kwargs):
+        non_dev = BugUser.objects.filter(is_developer=False)
+        non_pm = BugUser.objects.filter(is_project_manager=False)
+        non_admin = BugUser.objects.filter(is_superuser=False)
+        context = {
+            'non_dev' : non_dev,
+            'non_pm' : non_pm,
+            'non_admin' : non_admin
+        }
+        return render(request,'users/roles.html',context)
 
-    def form_valid(self, form):
-        user = form.instance.username
-        print(user)
-        user = BugUser.objects.filter(username=user)
-        user.update(is_superuser=True)
-    
-        return super(RoleView, self).form_valid(form)
+    def post(self, request, *args,**kwargs):
+        if self.request.POST['ad'] != 'none':
+            ad_id = self.request.POST['ad']
+            
+            user = BugUser.objects.get(id=ad_id)
+            
+            for item in Administrator.objects.all():
+                if item != user.id:
+                    user.is_superuser=True
+                    user.save()
+
+                    a_user = Administrator.objects.create(
+                        username = user
+                    )
+
+                    return redirect('roles_home')
+
+                
+            return redirect('roles_home')
+
+
+class PmPostView(View):
+    def post(self, request, *args,**kwargs):
+        if self.request.POST['pm'] != 'none':
+            pm_id = self.request.POST['pm']
+            user = BugUser.objects.get(id=pm_id)
+            
+            user.is_project_manager=True
+            user.save()
+            
+            ad_user = self.request.user
+            pm_user = Administrator.objects.get(username=ad_user)
+            
+            a_user = ProjectManager.objects.create(
+                        username = user,
+                        admin    = pm_user
+                    )
+            
+            return redirect('roles_home')
+        return redirect('roles_home')
+
+class DevPostView(View):
+    def post(self, request, *args,**kwargs):
+        if self.request.POST['dev'] != 'none':
+            dev_id = self.request.POST['dev']
+            
+            user = BugUser.objects.get(id=dev_id)
+            user.is_developer=True
+            user.save()
+            
+            dev_assigner = self.request.user
+            assigner = BugUser.objects.get(id=dev_assigner.id)
+
+            a_user = Developer.objects.create(
+                        username = user,
+                        assigner    = assigner
+                    )
+                    
+            return redirect('roles_home')
+        return redirect('roles_home')
+   
+
+
     

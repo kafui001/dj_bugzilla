@@ -29,29 +29,30 @@ class BugUser(AbstractUser):
 
 
 class Administrator(models.Model):
-    username = models.CharField(max_length=150)
+    username = models.OneToOneField(BugUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.username
+        return self.username.username
 
-    # def __str__(self):
-    #     return self.user.username
+    
 
 class ProjectManager(models.Model):
-    username  = models.CharField(max_length=150)
-    admin = models.ForeignKey(Administrator,on_delete=models.SET_NULL,null=True, related_name='pm_admin')
+    username  = models.OneToOneField(BugUser, on_delete=models.CASCADE)
+    admin =  models.ForeignKey(Administrator,on_delete=models.SET_NULL, null=True,related_name='pm_assigner')
 
     def __str__(self):
-        return self.username
+        return self.username.username
+
+    
 
 
 class Developer(models.Model):
-    username          = models.CharField(max_length=150)
+    username          = models.OneToOneField(BugUser, on_delete=models.CASCADE)
     assigner          = models.ForeignKey(BugUser,on_delete=models.SET_NULL, null=True,related_name='dev_assigner')
     
 
     def __str__(self):
-        return self.username
+        return self.username.username
 
 class Task(models.Model):
     title              = models.CharField(max_length=255)

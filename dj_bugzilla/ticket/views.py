@@ -6,7 +6,7 @@ from django.views.generic import ListView, CreateView,FormView, DetailView, Upda
 
 from .forms import TicketForm, TicketEditForm, CommentForm
 from core.models import Ticket, Developer, AllImage, Comment
-from users.forms import DevTicketForm
+# from users.forms import DevTicketForm
 
 # Create your views here.
 
@@ -36,7 +36,7 @@ class TicketFormView(FormView):
         form.creator = self.request.user
         form.status  = 'open'
 
-        # create a ticket number for ticket instance
+        # create a ticket number for each ticket instance
         while True:
             id = random.randint(10000,99999)
             if Ticket.objects.filter(ticket_id=id).count() == 0:
@@ -62,7 +62,7 @@ class TicketDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TicketDetailView, self).get_context_data(**kwargs)
-        context['form']         = DevTicketForm
+        # context['form']         = DevTicketForm
         context['comment_form'] = CommentForm
         context['image']        = AllImage.objects.all()
         context['all_comments'] = Comment.objects.all()
@@ -74,6 +74,7 @@ class TicketDetailView(DetailView):
 class CommentFormWork(CreateView):
     model       = Comment
     form_class  = CommentForm
+    
     def get_success_url(self):
         return reverse_lazy('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']})
 

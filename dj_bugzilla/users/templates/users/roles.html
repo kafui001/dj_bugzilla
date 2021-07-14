@@ -42,9 +42,16 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="deadline-form">
-                                                        <form method="POST" action="">
+                                                        <form method="POST" action="{% url 'dev_role' %}">
                                                             {% csrf_token %}
-                                                            {{ dev_form.as_p }}
+                                                           
+                                                            <select name="dev" class="form-control">
+                                                                <option value='none'>Select a username</option>
+                                                                {% for dev in non_dev %}
+                                                                <option value='{{ dev.id }}'>{{ dev.username }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                           
                                                             <div class="modal-footer">
                                                                 <button type="submit" class="btn btn-primary">Assign role</button>
                                                             </div>
@@ -67,9 +74,16 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="deadline-form">
-                                                    <form method="POST" action="">
+                                                    <form method="POST" action="{% url 'pm_role' %}">
                                                         {% csrf_token %}
-                                                        {{ pm_form.as_p }}
+                                                        
+                                                        <select name="pm" class="form-control">
+                                                            <option value='none'>Select a username</option>
+                                                            {% for pm in non_pm %}
+                                                            <option value='{{ pm.id }}'>{{ pm.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        
                                                         <div class="modal-footer">
                                                             <button type="submit" class="btn btn-primary">Assign role</button>
                                                         </div>
@@ -94,7 +108,14 @@
                                                 <div class="deadline-form">
                                                     <form method="POST" action="">
                                                         {% csrf_token %}
-                                                        {{ form.as_p }}
+                                                        
+                                                        <select name="ad" class="form-control">
+                                                            <option value='none'>Select a username</option>
+                                                            {% for ad in non_admin %}
+                                                            <option value='{{ ad.id }}'>{{ ad.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        
                                                         <div class="modal-footer">
                                                             <button type="submit" class="btn btn-primary">Assign role</button>
                                                         </div>
