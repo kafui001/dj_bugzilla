@@ -1,6 +1,6 @@
 
 # dj_bugzilla
-This is a mini application to track a bug through the a software development life cycle.
+This is a mini application to track a bug through the life cycle of a software development process.
 
 The key features are:
 1. Ticketing system
