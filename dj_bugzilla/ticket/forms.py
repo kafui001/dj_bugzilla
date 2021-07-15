@@ -3,13 +3,13 @@ import random
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 # from .models import ProjectManager, Developer, Task
-from core.models import Ticket,TaskPriority, TaskStatus, Comment
+from core.models import Ticket,TaskPriority, TaskStatus, Comment,Developer
 
 
-# assign_developers = Developer.objects.all().values_list('name','name')
-# assign_list = []
-# for item in assign_developers:
-#     assign_list.append(item)
+assign_developers = Developer.objects.all().values_list('username','username')
+dev_list = []
+for item in assign_developers:
+    dev_list.append(item)
 
 
 priority_choices = TaskPriority.objects.all().values_list('name','name')
@@ -112,4 +112,21 @@ class CommentForm(forms.ModelForm):
                 }
             )
 
+        }
+
+
+class DeveloperForm(forms.ModelForm):
+    class Meta:
+        model = Developer
+        fields = [
+            'username'
+        ]
+
+        widgets = {
+            'username': forms.Select(choices=dev_list, attrs={
+                'class': 'form-control',
+                'id':'DeveloperForm',
+                'aria-label':"",
+                }
+             )
         }

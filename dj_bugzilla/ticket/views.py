@@ -2,9 +2,9 @@ import random
 
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView,View
 
-from .forms import TicketForm, TicketEditForm, CommentForm
+from .forms import TicketForm, TicketEditForm, CommentForm, DeveloperForm
 from core.models import Ticket, Developer, AllImage, Comment
 # from users.forms import DevTicketForm
 
@@ -66,6 +66,7 @@ class TicketDetailView(DetailView):
         context['comment_form'] = CommentForm
         context['image']        = AllImage.objects.all()
         context['all_comments'] = Comment.objects.all()
+        context['assign_dev']   = Developer.objects.all()
         return context
 
  
@@ -84,6 +85,26 @@ class CommentFormWork(CreateView):
         
         return super().form_valid(form)
        
+
+class AssignTicketView(View):
+   
+    def post(self, request, *args,**kwargs):
+        if self.request.POST['dev'] != 'none':
+            ticket_id = self.kwargs['pk']
+            dev_id = self.request.POST['dev']
+            
+            dev = Developer.objects.get(id=dev_id)
+            
+
+            ticket_instance = Ticket.objects.get(id=ticket_id)
+            ticket_instance.assigned_to = dev
+            ticket_instance.save(update_fields=['assigned_to'])
+
+    
+            return redirect(reverse('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']}))
+
+    
+
 
 
 class TicketEditView(UpdateView):

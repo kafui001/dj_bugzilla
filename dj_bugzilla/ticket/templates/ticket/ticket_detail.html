@@ -101,14 +101,28 @@
                                 <div class="modal-content mb-3">
                                     <div class="modal-header">
                                         <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Developer</h5>
-                                        <a href="#" class="btn btn-primary">Switch Assigned Developer</a>
+                                        <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
                                     </div>
                                     
                                     <div class="modal-body">
                                         <div class="deadline-form">
-                                            <form method="POST" action="">
+                                            <!-- <form method="POST" action="">
                                                 {% csrf_token %}
-                                                {{ form.as_p }}
+                                                {{ assign_dev.as_p }}
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Assign Ticket</button>
+                                                </div>
+                                            </form> -->
+                                            <form method="POST" action="{% url 'ticket:ticket_response_form' object.id %}">
+                                                {% csrf_token %}
+                                            
+                                                <select name="dev" class="form-control">
+                                                    <option value='none'>Select a username</option>
+                                                    {% for dev in assign_dev %}
+                                                    <option value='{{ dev.id }}'>{{ dev.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary">Assign Ticket</button>
                                                 </div>
@@ -220,7 +234,7 @@
                                                 <div class="post">
                                                     <!-- <textarea class="form-control" placeholder="Post" rows="4"></textarea> -->
                                                     
-                                                    <form method="POST" action="{%url 'ticket:comment_form' object.id%}">
+                                                    <form method="POST" action="{% url 'ticket:comment_form' object.id %}">
                                                         {% csrf_token %}
                                                         {{ comment_form.as_p }}
                                                         <!-- <div class="modal-footer"> -->
