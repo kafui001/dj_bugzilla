@@ -5,7 +5,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView,View
 
 from .forms import TicketForm, TicketEditForm, CommentForm, DeveloperForm
-from core.models import Ticket, Developer, AllImage, Comment
+from core.models import Ticket, Developer, AllImage, Comment,Notification,Administrator
 # from users.forms import DevTicketForm
 
 # Create your views here.
@@ -32,6 +32,7 @@ class TicketFormView(FormView):
         form         = TicketForm(self.request.POST)
         new_image    = self.request.FILES.get('image') 
 
+        print(new_image)
         form         = form.save(commit=False)
         form.creator = self.request.user
         form.status  = 'open'
@@ -43,13 +44,25 @@ class TicketFormView(FormView):
                 break 
         form.ticket_id = id 
         form.save()
+        
+        if new_image != None:
+            save_new_image = AllImage.objects.create(
+                ticket = form,
+                image = new_image
+            )
 
-        save_new_image = AllImage.objects.create(
-            ticket = form,
-            image = new_image
-        )
-        # save_new_image.ticket.add(form)
-        # new_ticketImage = TicketImage.objects.create(ticket=form,allimage=save_new_image,)
+
+        administrators = Administrator.objects.all()
+
+        # loop through administrators to create notification for each admin about 
+        # new ticket instance creation
+        for admin in administrators:
+            Notification.objects.create(
+                notification_type = 1,
+                to_user           = admin.username,
+                from_user         = self.request.user,
+                ticket            = form
+            )
 
         return super(TicketFormView, self).form_valid(form)
  
@@ -100,6 +113,12 @@ class AssignTicketView(View):
             ticket_instance.assigned_to = dev
             ticket_instance.save(update_fields=['assigned_to'])
 
+            Notification.objects.create(
+                notification_type = 7,
+                to_user           = dev.username,
+                from_user         = self.request.user,
+                ticket            = ticket_instance
+            )
     
             return redirect(reverse('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']}))
 

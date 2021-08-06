@@ -1,5 +1,6 @@
 import random
 
+from django.utils import timezone
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
@@ -125,8 +126,26 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.body[:10]
+
+
+class Notification(models.Model):
+    # 1=ticket 2=task 3=project 4=dev_role 5=pm_role 6=admin_role 7=assigned_ticket 8=assigned_task
+    notification_type    = models.IntegerField()
+    to_user              = models.ForeignKey(BugUser, related_name='notification_to',on_delete=models.CASCADE)  
+    from_user            = models.ForeignKey(BugUser, related_name='notification_from',on_delete=models.CASCADE)     
+    notification_is_seen = models.BooleanField(default=False)
+    date_created         = models.DateField(default=timezone.now)
+    # Project            = models.ForeignKey(Project,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
+    task                 = models.ForeignKey(Task,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
+    ticket               = models.ForeignKey(Ticket,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
+    dev_role_assign      = models.ForeignKey(Developer,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
+    pm_role_assign       = models.ForeignKey(ProjectManager,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
+    admin_role_assign    = models.ForeignKey(Administrator,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
     
-    
+
+
+
+
 
 
 

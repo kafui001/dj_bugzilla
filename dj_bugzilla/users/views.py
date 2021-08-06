@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 # from .forms import UserSignUpForm, LoginForm, AdminForm, PmForm, DevForm
 from .forms import UserSignUpForm, LoginForm
 
-from core.models import Administrator, BugUser,Developer, ProjectManager
+from core.models import Administrator, BugUser,Developer, ProjectManager, Notification
 
 class UserSignUpView(View):
     
@@ -75,8 +75,15 @@ class RoleView(View):
                     user.is_superuser=True
                     user.save()
 
-                    a_user = Administrator.objects.create(
+                    ad_user = Administrator.objects.create(
                         username = user
+                    )
+
+                    Notification.objects.create(
+                        notification_type = 6,
+                        to_user           = user.username,
+                        from_user         = self.request.user,
+                        admin_role_assign   = ad_user
                     )
 
                     return redirect('roles_home')
@@ -97,10 +104,17 @@ class PmPostView(View):
             ad_user = self.request.user
             pm_user = Administrator.objects.get(username=ad_user)
             
-            a_user = ProjectManager.objects.create(
+            a_pm_user = ProjectManager.objects.create(
                         username = user,
                         admin    = pm_user
                     )
+
+            Notification.objects.create(
+                    notification_type = 5,
+                    to_user           = user,
+                    from_user         = self.request.user,
+                    pm_role_assign   = a_pm_user
+                )
             
             return redirect('roles_home')
         return redirect('roles_home')
@@ -121,6 +135,13 @@ class DevPostView(View):
                         username = user,
                         assigner    = assigner
                     )
+
+            Notification.objects.create(
+                    notification_type = 4,
+                    to_user           = user,
+                    from_user         = self.request.user,
+                    dev_role_assign   = a_user
+                )
                     
             return redirect('roles_home')
         return redirect('roles_home')

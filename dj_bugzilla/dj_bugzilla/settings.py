@@ -77,6 +77,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            # register custom template_tags here
+            'libraries':{
+            'custom_notification_tag': 'core.templatetag.custom_notification_tag'
+            }
         },
     },
 ]

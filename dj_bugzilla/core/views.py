@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic.list import MultipleObjectMixin
-from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView,View
 from django.urls import reverse_lazy
 
-from .models import Task
+from .models import Task,Notification
 from .forms import TaskForm, TaskEditForm
 
 #Create your views here.
@@ -35,10 +36,21 @@ class TaskView(FormView):
             form.creator = self.request.user
             form.status = 'open'
             form.save()
+
+            # send task creation notification to assigned pm
+            # Notification.objects.create(
+            #         notification_type = 2,
+            #         to_user           = dev.username,
+            #         from_user         = self.request.user,
+            #         task            = form
+            #     )
+
             return super(TaskView, self).form_valid(form)
         else:
             print("you are not authorized to create a task")
 #             # fix this section
+
+        
 
 
 class TaskDetailView(DetailView):
@@ -59,3 +71,42 @@ class TaskDeleteView(DeleteView):
     context_object_name = 'task'
     template_name = 'core/task_delete.html'
     success_url = reverse_lazy('core:task')
+
+
+class DeleteNotification(DeleteView):
+    model = Notification
+
+    def post(self, request, pk,*args,**kwargs):
+
+        print('##########')
+        print('getting somewhere')
+        print('##########')
+        print(self.request)
+        notification = Notification.objects.get(id=pk)
+
+        if notification.notification_type == 1:
+            tic_id = notification.ticket.id
+            notification.delete()
+            print('##########')
+            print('notification deleted')
+            print('##########')
+            return redirect(reverse('ticket:ticket_detail', kwargs={'pk': tic_id}))
+        elif notification.notification_type == 4:
+            notification.delete()
+            print('##########')
+            print('notification type 4 deleted')
+            print('##########')
+            return redirect('roles_home')
+        elif notification.notification_type == 5:
+            notification.delete()
+            print('##########')
+            print('notification type 4 deleted')
+            print('##########')
+            return redirect('roles_home')
+        elif notification.notification_type == 6:
+            notification.delete()
+            print('##########')
+            print('notification type 4 deleted')
+            print('##########')
+            return redirect('roles_home')
+

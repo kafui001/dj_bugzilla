@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Task,BugUser,TaskStatus,TaskPriority,Comment,Ticket,AllImage, Administrator,ProjectManager,Developer
+from .models import Notification, Task,BugUser,TaskStatus,TaskPriority,Comment,Ticket,AllImage, Administrator,ProjectManager,Developer
 # # Register your models here.
 
 admin.site.register(BugUser)
@@ -12,3 +12,4 @@ admin.site.register(AllImage)
 admin.site.register(Administrator)
 admin.site.register(ProjectManager)
 admin.site.register(Developer)
+admin.site.register(Notification)
