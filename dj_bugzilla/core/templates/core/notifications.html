@@ -28,7 +28,7 @@
                         <li class="py-2 mb-1 border-bottom">
                             <!-- <a href="javascript:void(0);" class="d-flex"> -->
                             <div class="flex-fill ms-2">
-                                <div><small class="mr-5">from -- {{ notification.from_user }}</small> || <small>{{ notification.date_created }}</small>
+                                <div><small class="mr-5">from --  {{ notification.from_user }}</small> || <small>{{ notification.date_created }}</small>
                                 </div>
                         
                                 <form id="myform" method="POST" action="{% url 'core:notification_delete' notification.pk %}">

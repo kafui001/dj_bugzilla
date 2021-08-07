@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.decorators.http import require_POST
-from .views import TicketHomeView, TicketFormView, TicketDetailView, TicketEditView, TicketDeleteView,CommentFormWork,AssignTicketView
+from .views import TicketHomeView, TicketFormView, TicketDetailView, TicketEditView, TicketDeleteView,CommentFormWork,AssignTicketView, AssignToView
 # from .views import TicketHomeView, TicketFormView, TicketEditView, TicketDeleteView,ticket_detail_view
 app_name = 'ticket'
 
@@ -14,4 +14,5 @@ urlpatterns = [
     # path('comment/<int:id>',commentFormWork, name='comment_form'),
     path('delete/<int:pk>/',TicketDeleteView.as_view(), name='ticket_delete'),
     path('ticket_form/',TicketFormView.as_view(), name='ticket_form'),
+    path('assigned_to/<int:pk>/',AssignToView.as_view(), name='assigned_to'),
 ]

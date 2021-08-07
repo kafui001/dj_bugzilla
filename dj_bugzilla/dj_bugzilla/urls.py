@@ -19,7 +19,9 @@ urlpatterns = [
     path('roles/',user_views.RoleView.as_view(), name='roles_home'),
     path('assign_pm/',user_views.PmPostView.as_view(), name='pm_role'),
     path('assign_dev/',user_views.DevPostView.as_view(), name='dev_role'),
-    
+    path('assign_pm_role/',user_views.AssignPmRoleView.as_view(), name='assign_pm_role'),
+    path('assign_dev_role/',user_views.AssignDevRoleView.as_view(), name='assign_dev_role'),
+    path('assign_admin_role/',user_views.AssignAdminRoleView.as_view(), name='assign_admin_role'),
     # path('dashboard/',core_views.dashboard, name='dashboard_home'),
 
     path('task/',include('core.urls', namespace='core')),

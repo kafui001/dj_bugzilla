@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView, View
+from django.views.generic import FormView, CreateView, View, TemplateView,DetailView
 from django.contrib.auth import login, logout
 from django.views import View
 from django.contrib.auth.views import LoginView
@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 # from .forms import UserSignUpForm, LoginForm, AdminForm, PmForm, DevForm
 from .forms import UserSignUpForm, LoginForm
 
-from core.models import Administrator, BugUser,Developer, ProjectManager, Notification
+from core.models import Administrator, BugUser,Developer, ProjectManager, Notification, Ticket
 
 class UserSignUpView(View):
     
@@ -81,7 +81,7 @@ class RoleView(View):
 
                     Notification.objects.create(
                         notification_type = 6,
-                        to_user           = user.username,
+                        to_user           = user,
                         from_user         = self.request.user,
                         admin_role_assign   = ad_user
                     )
@@ -145,6 +145,21 @@ class DevPostView(View):
                     
             return redirect('roles_home')
         return redirect('roles_home')
+
+
+class AssignPmRoleView(TemplateView):
+    template_name = 'users/assigned_pm_Role.html'
+
+
+class AssignDevRoleView(TemplateView):
+    template_name = 'users/assigned_dev_role.html'
+
+
+class AssignAdminRoleView(TemplateView):
+    template_name = 'users/assigned_admin_role.html'
+    
+
+
    
 
 

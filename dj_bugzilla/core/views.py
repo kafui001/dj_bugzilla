@@ -15,10 +15,6 @@ class TaskView(FormView):
     template_name = 'core/task.html'
     form_class = TaskForm
     success_url = reverse_lazy('core:task')
-    # MultipleObjectMixin 
-    # context_object_name = 'tasks'
-    # paginate_by = 10
-    # queryset = Task.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(TaskView, self).get_context_data(**kwargs)
@@ -81,7 +77,6 @@ class DeleteNotification(DeleteView):
         print('##########')
         print('getting somewhere')
         print('##########')
-        print(self.request)
         notification = Notification.objects.get(id=pk)
 
         if notification.notification_type == 1:
@@ -92,21 +87,28 @@ class DeleteNotification(DeleteView):
             print('##########')
             return redirect(reverse('ticket:ticket_detail', kwargs={'pk': tic_id}))
         elif notification.notification_type == 4:
+            dev_role = notification.dev_role_assign.id
             notification.delete()
-            print('##########')
-            print('notification type 4 deleted')
-            print('##########')
-            return redirect('roles_home')
+            return redirect('assign_dev_role')
         elif notification.notification_type == 5:
             notification.delete()
             print('##########')
-            print('notification type 4 deleted')
+            print('notification type 5 deleted')
             print('##########')
-            return redirect('roles_home')
+            return redirect('assign_pm_role')
         elif notification.notification_type == 6:
             notification.delete()
             print('##########')
-            print('notification type 4 deleted')
+            print('notification type 6 deleted')
             print('##########')
-            return redirect('roles_home')
+            return redirect('assign_admin_role')
+        elif notification.notification_type == 7:
+            tic_id = notification.ticket.id
+            notification.delete()
+            print('##########')
+            print('notification type 7 deleted')
+            print('##########')
+            # return redirect('assigned_role', kwargs={'pk': tic_id})
+            # return redirect(reverse('assigned_role', kwargs={'pk': tic_id}))
+            return redirect(reverse('ticket:assigned_to', kwargs={'pk': tic_id}))
 

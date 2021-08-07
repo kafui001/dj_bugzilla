@@ -121,7 +121,12 @@ class AssignTicketView(View):
             )
     
             return redirect(reverse('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']}))
+            
 
+class AssignToView(DetailView):
+    model         = Ticket
+    context_object_name = 'ticket'
+    template_name = 'ticket/assigned_to.html'
     
 
 
@@ -130,7 +135,9 @@ class TicketEditView(UpdateView):
     model         = Ticket
     form_class    = TicketEditForm
     template_name = 'ticket/ticket_edit.html'
-    success_url   = reverse_lazy('ticket:ticket_home')
+
+    def get_success_url(self):
+        return reverse_lazy('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 
