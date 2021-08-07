@@ -124,9 +124,9 @@ class AssignTicketView(View):
             
 
 class AssignToView(DetailView):
-    model         = Ticket
+    model               = Ticket
     context_object_name = 'ticket'
-    template_name = 'ticket/assigned_to.html'
+    template_name       = 'ticket/assigned_to.html'
     
 
 

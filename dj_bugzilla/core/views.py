@@ -4,7 +4,7 @@ from django.views.generic.list import MultipleObjectMixin
 from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView,View
 from django.urls import reverse_lazy
 
-from .models import Task,Notification
+from .models import Task,Notification,Developer,Administrator, ProjectManager
 from .forms import TaskForm, TaskEditForm
 
 #Create your views here.
@@ -18,11 +18,11 @@ class TaskView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super(TaskView, self).get_context_data(**kwargs)
-        context['tasks'] = Task.objects.all()
-        context['unassigned'] = Task.objects.filter(status='open')
-        context['in_progress'] = Task.objects.filter(status='in progress')
+        context['tasks']        = Task.objects.all()
+        context['unassigned']   = Task.objects.filter(status='open')
+        context['in_progress']  = Task.objects.filter(status='in progress')
         context['needs_review'] = Task.objects.filter(status='needs review')
-        context['completed'] = Task.objects.filter(status='completed')
+        context['completed']    = Task.objects.filter(status='completed')
         return context
 
 #     # limit task creation to only admin and project manager
@@ -33,14 +33,17 @@ class TaskView(FormView):
             form.status = 'open'
             form.save()
 
-            # send task creation notification to assigned pm
-            # Notification.objects.create(
-            #         notification_type = 2,
-            #         to_user           = dev.username,
-            #         from_user         = self.request.user,
-            #         task            = form
-            #     )
+            # administrators = Administrator.objects.all()
 
+            # # loop through administrators to create notification for each admin about 
+            # # new task instance creation
+            # for admin in administrators:
+            #     Notification.objects.create(
+            #         notification_type = 2,
+            #         to_user           = admin.username,
+            #         from_user         = self.request.user,
+            #         task              = form
+            #     )
             return super(TaskView, self).form_valid(form)
         else:
             print("you are not authorized to create a task")
@@ -50,16 +53,49 @@ class TaskView(FormView):
 
 
 class TaskDetailView(DetailView):
-    model = Task
-    # context_object_name = 'task'
-    template_name = 'core/task_detail.html'
+    model               = Task
+    context_object_name = 'task'
+    template_name       = 'core/task_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context                 = super(TaskDetailView, self).get_context_data(**kwargs)
+        context['assign_dev']   = Developer.objects.all()
+        return context
+
+
+class AssignTaskView(View):
+   
+    def post(self, request, *args,**kwargs):
+        if self.request.POST['dev'] != 'none':
+            task_id = self.kwargs['pk']
+            dev_id = self.request.POST['dev']
+            
+            dev = Developer.objects.get(id=dev_id)
+            
+
+            task_instance = Task.objects.get(id=task_id)
+            task_instance.developer_assigned = dev
+            task_instance.save(update_fields=['developer_assigned'])
+
+            Notification.objects.create(
+                notification_type = 8,
+                to_user           = dev.username,
+                from_user         = self.request.user,
+                task            = task_instance
+            )
+    
+            return redirect(reverse('core:task_detail', kwargs={'pk': self.kwargs['pk']}))
+
+
 
 
 class TaskEditView(UpdateView):
     model = Task
     form_class = TaskEditForm
     template_name = 'core/task_edit.html'
-    success_url = reverse_lazy('core:task')
+    
+    def get_success_url(self):
+        return reverse_lazy('core:task_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class TaskDeleteView(DeleteView):
@@ -67,6 +103,14 @@ class TaskDeleteView(DeleteView):
     context_object_name = 'task'
     template_name = 'core/task_delete.html'
     success_url = reverse_lazy('core:task')
+
+
+
+class AssignTaskToView(DetailView):
+    model               = Task
+    context_object_name = 'task'
+    template_name       = 'core/task_assigned_to.html'
+
 
 
 class DeleteNotification(DeleteView):
@@ -111,4 +155,14 @@ class DeleteNotification(DeleteView):
             # return redirect('assigned_role', kwargs={'pk': tic_id})
             # return redirect(reverse('assigned_role', kwargs={'pk': tic_id}))
             return redirect(reverse('ticket:assigned_to', kwargs={'pk': tic_id}))
+
+        elif notification.notification_type == 8:
+            task_id = notification.task.id
+            notification.delete()
+            print('##########')
+            print('notification type 8 deleted')
+            print('##########')
+            # return redirect('assigned_role', kwargs={'pk': tic_id})
+            # return redirect(reverse('assigned_role', kwargs={'pk': tic_id}))
+            return redirect(reverse('core:task_assigned_to', kwargs={'pk': task_id}))
 
