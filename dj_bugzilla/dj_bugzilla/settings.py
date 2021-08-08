@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'core',
     'users',
     'ticket',
+    'project',
     # 'project',
     # 3rd party apps
 

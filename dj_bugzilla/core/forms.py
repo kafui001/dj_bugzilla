@@ -9,6 +9,7 @@ from .models import Task, Ticket, ProjectManager, Developer, TaskPriority, TaskS
 #     developer_list.append(item)
 
 
+
 priority_choices = TaskPriority.objects.all().values_list('name','name')
 priority_choice_list = []
 for item in priority_choices:

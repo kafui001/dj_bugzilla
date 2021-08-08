@@ -65,7 +65,7 @@ class Task(models.Model):
     date_completed     = models.DateField(auto_now=True)
     status             = models.CharField(max_length=255)
     priority           = models.CharField(max_length=255)
-    project            = models.CharField(max_length=255)
+    project            = models.ForeignKey('Project',on_delete=models.SET_NULL, null=True,blank=True,related_name='task_project')
     
 
 class TaskPriority(models.Model):
@@ -88,15 +88,16 @@ class TaskStatus(models.Model):
         return reverse('home')
 
 
-# class Project(models.Model):
-#     title        = models.CharField(max_length=255)
-#     description  = models.TextField()
-#     creator      = models.ForeignKey(BugUser,on_delete=models.SET_NULL, null=True,related_name='project_creator')
-#     status
-#     date_created
-#     begin_date
-#     end_date
-#     assigned_to  = pm
+class Project(models.Model):
+    title        = models.CharField(max_length=255)
+    description  = models.TextField()
+    creator      = models.ForeignKey(Administrator,on_delete=models.SET_NULL, null=True,blank=True,related_name='project_creator')
+    status       = models.CharField(max_length=50)
+    date_created = models.DateField(auto_now_add=True)
+    begin_date   = models.DateField(auto_now=True)
+    end_date     = models.DateField(auto_now=True)
+    project_lead = models.ForeignKey(ProjectManager,on_delete=models.SET_NULL, null=True,blank=True,related_name='project_pm')
+    completion   = models.CharField(max_length=255)
 
 
 class Ticket(models.Model):
@@ -107,7 +108,7 @@ class Ticket(models.Model):
     assigned_to        = models.ForeignKey(Developer,on_delete=models.SET_NULL, null=True,blank=True,related_name='ticket_developer')
     priority           = models.CharField(max_length=50)
     status             = models.CharField(max_length=50)
-    # project            = models.CharField(max_length=50)
+    project            = models.ForeignKey('Project',on_delete=models.SET_NULL, null=True,blank=True,related_name='ticket_project')
     date_created       = models.DateField(auto_now_add=True)
     date_resolved      = models.DateField(auto_now=True)
                  
@@ -135,7 +136,7 @@ class Notification(models.Model):
     from_user            = models.ForeignKey(BugUser, related_name='notification_from',on_delete=models.CASCADE)     
     notification_is_seen = models.BooleanField(default=False)
     date_created         = models.DateField(default=timezone.now)
-    # Project            = models.ForeignKey(Project,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
+    Project              = models.ForeignKey('Project',on_delete=models.SET_NULL,related_name='+',null=True, blank=True)
     task                 = models.ForeignKey(Task,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
     ticket               = models.ForeignKey(Ticket,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
     dev_role_assign      = models.ForeignKey(Developer,on_delete=models.CASCADE, related_name='+',null=True, blank=True)

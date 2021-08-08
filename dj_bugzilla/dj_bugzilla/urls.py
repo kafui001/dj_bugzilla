@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('task/',include('core.urls', namespace='core')),
     path('ticket/',include('ticket.urls', namespace='ticket')),
+    path('project/',include('project.urls', namespace='project')),
     # path('project/',include('project.urls', namespace='project')),
 ]
 
