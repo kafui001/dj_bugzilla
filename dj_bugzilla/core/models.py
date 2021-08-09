@@ -88,16 +88,24 @@ class TaskStatus(models.Model):
         return reverse('home')
 
 
+class ProjectStatus(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 class Project(models.Model):
     title        = models.CharField(max_length=255)
     description  = models.TextField()
     creator      = models.ForeignKey(Administrator,on_delete=models.SET_NULL, null=True,blank=True,related_name='project_creator')
     status       = models.CharField(max_length=50)
     date_created = models.DateField(auto_now_add=True)
-    begin_date   = models.DateField(auto_now=True)
-    end_date     = models.DateField(auto_now=True)
+    begin_date   = models.DateField(null=True, blank=True)
+    end_date     = models.DateField(null=True, blank=True)
     project_lead = models.ForeignKey(ProjectManager,on_delete=models.SET_NULL, null=True,blank=True,related_name='project_pm')
     completion   = models.CharField(max_length=255)
+
+        
 
 
 class Ticket(models.Model):
@@ -136,7 +144,7 @@ class Notification(models.Model):
     from_user            = models.ForeignKey(BugUser, related_name='notification_from',on_delete=models.CASCADE)     
     notification_is_seen = models.BooleanField(default=False)
     date_created         = models.DateField(default=timezone.now)
-    Project              = models.ForeignKey('Project',on_delete=models.SET_NULL,related_name='+',null=True, blank=True)
+    project              = models.ForeignKey('Project',on_delete=models.SET_NULL,related_name='+',null=True, blank=True)
     task                 = models.ForeignKey(Task,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
     ticket               = models.ForeignKey(Ticket,on_delete=models.CASCADE, related_name='+',null=True, blank=True)
     dev_role_assign      = models.ForeignKey(Developer,on_delete=models.CASCADE, related_name='+',null=True, blank=True)

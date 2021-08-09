@@ -45,7 +45,7 @@
                                 <tbody>
                                     <tr><a href="#">
                                             <td>
-                                                <a href="#"
+                                                <a href="{% url 'project:project_detail' item.pk %}"
                                                     class="fw-bold text-secondary">
                                                     {{item.title}}
                                                 </a>
@@ -57,26 +57,26 @@
                                             </td>
                                             <td>
                                                 <a href="#">
-                                                    <span class="fw-bold ms-1">{{item.creator}}</span>
+                                                    {{item.end_date}}
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="{% url 'ticket:ticket_detail' item.pk %}">
-                                                    {{item.date_created}}
+                                                <a href="{% url 'project:project_detail' item.pk %}">
+                                                    <span class="fw-bold ms-1">{{item.project_lead}}</span>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="{% url 'ticket:ticket_detail' item.pk %}">
-                                                    {{item.status}}
+                                                <a href="{% url 'project:project_detail' item.pk %}">
+                                                    <span class="fw-bold ms-1">{{item.completion}}%</span>
                                                 </a>
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                     <button type="button" class="btn btn-outline-secondary"><a
-                                                            href="#"><i
+                                                            href="{% url 'project:project_edit' item.pk %}"><i
                                                                 class="icofont-edit text-success"></i></a></button>
                                                     <button type="button" class="btn btn-outline-secondary deleterow"><a
-                                                            href="#"><i
+                                                            href="{% url 'project:project_delete' item.pk %}"><i
                                                                 class="icofont-ui-delete text-danger"></i></a></button>
                                                 </div>
                                             </td>
@@ -317,7 +317,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="deadline-form">
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'ticket:ticket_form' %}">
+                        <form method="POST" action="{% url 'project:project_form' %}">
                             {% csrf_token %}
                             {{ form.as_p }}
                             <div class="modal-footer">

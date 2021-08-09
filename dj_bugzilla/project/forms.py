@@ -1,5 +1,5 @@
 from django import forms
-from core.models import Task, Ticket, ProjectManager, Developer,Project
+from core.models import Task, Ticket, ProjectManager, Developer,Project, ProjectStatus
 
 
 progress = (
@@ -11,6 +11,12 @@ progress = (
     )
 
 
+project_status_choices = ProjectStatus.objects.all().values_list('name','name')
+choice_list = []
+for item in project_status_choices:
+    choice_list.append(item)
+
+
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -18,7 +24,8 @@ class ProjectForm(forms.ModelForm):
         fields = [
             'title',
            'description',
-           'completion'
+           'begin_date',
+           'end_date',
         ]
 
         widgets = {
@@ -30,6 +37,7 @@ class ProjectForm(forms.ModelForm):
             ),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
+
                 'placeholder':'add any extra details here',
                 'id':"exampleFormControlTextarea78",
                 'rows':"5"
@@ -41,10 +49,50 @@ class ProjectForm(forms.ModelForm):
             #     'aria-label':"",
             #     }
             # ),
-            'completion': forms.Select(choices=progress, attrs={
+            'begin_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+class ProjectEditForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = [
+            'title',
+            'description',
+            'status',
+            'completion',
+            'begin_date',
+            'end_date'
+        ]
+
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',                            
+                'placeholder':'title of your ticket',
+                'id':"ticketForm1"
+                }
+            ),
+            'description': forms.Textarea(attrs={
                 'class': 'form-control',
-                'id':'formFileMultiplestatus',
+                'placeholder':'add any extra details here',
+                'id':"ticketForm2",
+                'rows':"5"
+                }
+            ),
+            'status': forms.Select(choices=choice_list, attrs={
+                'class': 'form-control',
+                'id':'ticketForm3',
                 'aria-label':"",
                 }
             ),
+            'completion': forms.Select(choices=progress, attrs={
+                'class': 'form-control',
+                'id':'ticketForm4',
+                'aria-label':"",
+                }
+            ),
+            'begin_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+
         }
