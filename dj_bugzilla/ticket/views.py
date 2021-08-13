@@ -6,11 +6,12 @@ from django.views.generic import ListView, CreateView,FormView, DetailView, Upda
 
 from .forms import TicketForm, TicketEditForm, CommentForm, DeveloperForm
 from core.models import Ticket, Developer, AllImage, Comment,Notification,Administrator
+from core.mixins import SigninRequiredMixin, HigherLevelMixin,PmLevelMixin,DeveloperLevelMixin,SubmitterNotAllowedMixin
 # from users.forms import DevTicketForm
 
 # Create your views here.
 
-class TicketHomeView(ListView):
+class TicketHomeView(SigninRequiredMixin,ListView):
     model               = Ticket
     template_name       = 'ticket/ticket.html'
     context_object_name = 'tickets'
@@ -32,7 +33,7 @@ class TicketFormView(FormView):
         form         = TicketForm(self.request.POST)
         new_image    = self.request.FILES.get('image') 
 
-        print(new_image)
+        print(form)
         form         = form.save(commit=False)
         form.creator = self.request.user
         form.status  = 'open'
@@ -66,7 +67,7 @@ class TicketFormView(FormView):
 
         return super(TicketFormView, self).form_valid(form)
  
-class TicketDetailView(DetailView):
+class TicketDetailView(SigninRequiredMixin,SubmitterNotAllowedMixin,DetailView):
     model               = Ticket
     form_class          = TicketForm
     template_name       = 'ticket/ticket_detail.html'
@@ -75,7 +76,7 @@ class TicketDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TicketDetailView, self).get_context_data(**kwargs)
-        # context['form']         = DevTicketForm
+        
         context['comment_form'] = CommentForm
         context['image']        = AllImage.objects.all()
         context['all_comments'] = Comment.objects.all()
@@ -99,7 +100,7 @@ class CommentFormWork(CreateView):
         return super().form_valid(form)
        
 
-class AssignTicketView(View):
+class AssignTicketView(SigninRequiredMixin,View):
    
     def post(self, request, *args,**kwargs):
         if self.request.POST['dev'] != 'none':
@@ -123,7 +124,7 @@ class AssignTicketView(View):
             return redirect(reverse('ticket:ticket_detail', kwargs={'pk': self.kwargs['pk']}))
             
 
-class AssignToView(DetailView):
+class AssignToView(SigninRequiredMixin,DetailView):
     model               = Ticket
     context_object_name = 'ticket'
     template_name       = 'ticket/assigned_to.html'
@@ -131,7 +132,7 @@ class AssignToView(DetailView):
 
 
 
-class TicketEditView(UpdateView):
+class TicketEditView(SigninRequiredMixin,UpdateView):
     model         = Ticket
     form_class    = TicketEditForm
     template_name = 'ticket/ticket_edit.html'
@@ -141,7 +142,7 @@ class TicketEditView(UpdateView):
 
 
 
-class TicketDeleteView(DeleteView):
+class TicketDeleteView(SigninRequiredMixin,DeleteView):
     model               = Ticket
     context_object_name = 'ticket'
     template_name       = 'ticket/ticket_delete.html'

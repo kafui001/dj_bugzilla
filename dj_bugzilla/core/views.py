@@ -1,15 +1,16 @@
+from django.contrib.auth import authenticate,login
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from django.views.generic.base import TemplateView
 from django.views.generic.list import MultipleObjectMixin
 from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView,View
 from django.urls import reverse_lazy
 
-from .models import Task,Notification,Developer,Administrator, ProjectManager
+from .models import BugUser, Task,Notification,Developer,Administrator, ProjectManager
 from .forms import TaskForm, TaskEditForm
 
 #Create your views here.
 
-# class TaskView(MultipleObjectMixin,FormView):
 class TaskView(FormView):
     model = Task
     template_name = 'core/task.html'
@@ -33,17 +34,6 @@ class TaskView(FormView):
             form.status = 'open'
             form.save()
 
-            # administrators = Administrator.objects.all()
-
-            # # loop through administrators to create notification for each admin about 
-            # # new task instance creation
-            # for admin in administrators:
-            #     Notification.objects.create(
-            #         notification_type = 2,
-            #         to_user           = admin.username,
-            #         from_user         = self.request.user,
-            #         task              = form
-            #     )
             return super(TaskView, self).form_valid(form)
         else:
             print("you are not authorized to create a task")
@@ -112,6 +102,10 @@ class AssignTaskToView(DetailView):
     template_name       = 'core/task_assigned_to.html'
 
 
+class AssignTaskToView(DetailView):
+    model               = Task
+    context_object_name = 'task'
+    template_name       = 'core/task_assigned_to.html'
 
 class DeleteNotification(DeleteView):
     model = Notification
@@ -122,7 +116,6 @@ class DeleteNotification(DeleteView):
         print('getting somewhere')
         print('##########')
         notification = Notification.objects.get(id=pk)
-
         if notification.notification_type == 1:
             tic_id = notification.ticket.id
             notification.delete()
@@ -155,7 +148,6 @@ class DeleteNotification(DeleteView):
             # return redirect('assigned_role', kwargs={'pk': tic_id})
             # return redirect(reverse('assigned_role', kwargs={'pk': tic_id}))
             return redirect(reverse('ticket:assigned_to', kwargs={'pk': tic_id}))
-
         elif notification.notification_type == 8:
             task_id = notification.task.id
             notification.delete()
@@ -165,4 +157,57 @@ class DeleteNotification(DeleteView):
             # return redirect('assigned_role', kwargs={'pk': tic_id})
             # return redirect(reverse('assigned_role', kwargs={'pk': tic_id}))
             return redirect(reverse('core:task_assigned_to', kwargs={'pk': task_id}))
+        elif notification.notification_type == 9:
+            notification.delete()
+            print('##########')
+            print('notification type 5 deleted')
+            print('##########')
+            return redirect('project_pm_role')
 
+
+class AdminDemoLoginView(View):
+    def post(self, request, *args, **kwargs):
+        print('##########')
+        print(self.request)
+        print('##########')
+        admin = BugUser.objects.get(username='admin')
+        admin_password = 'smile'
+        # authenticate(username=admin, password=admin_password)
+        login(request,admin )
+        return redirect('project:project_home')
+
+
+class DeveloperDemoLoginView(View):
+    def post(self, request, *args, **kwargs):
+        print('##########')
+        print(self.request)
+        print('##########')
+        developer = BugUser.objects.get(username='developer')
+        dev_password = 'testing1234'
+        authenticate(username=developer, password=dev_password)
+        login(request,developer )
+        return redirect('project:project_home')
+
+
+class PmDemoLoginView(View):
+    def post(self, request, *args, **kwargs):
+        print('##########')
+        print(self.request)
+        print('##########')
+        pm = BugUser.objects.get(username='projectManager')
+        pm_password = 'testing1234'
+        authenticate(username=pm, password=pm_password)
+        login(request,pm )
+        return redirect('project:project_home')
+
+
+class SubmitterDemoLoginView(View):
+    def post(self, request, *args, **kwargs):
+        # print('##########')
+        # print(self.request)
+        # print('##########')
+        submitter = BugUser.objects.get(username='submitter')
+        submitter_password = 'testings'
+        authenticate(username=submitter, password=submitter_password)
+        login(request,submitter )
+        return redirect('ticket:ticket_home')

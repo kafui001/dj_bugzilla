@@ -1,7 +1,7 @@
 from django import forms
 # from django.forms import fields
 from .models import Task, Ticket, ProjectManager, Developer, TaskPriority, TaskStatus
-
+from ticket.forms import project_list
 
 # assign_developers = Developer.objects.all().values_list('name','name')
 # developer_list = []
@@ -27,8 +27,8 @@ class TaskForm(forms.ModelForm):
         fields = [
             'title',
            'description',
-        #    'status',
            'priority',
+           'project',
         ]
 
         widgets = {
@@ -57,6 +57,12 @@ class TaskForm(forms.ModelForm):
                 'aria-label':"",
                 }
             ),
+            'project': forms.Select(choices=project_list, attrs={
+                'class': 'form-control',
+                'id':'formFileMultipleone',
+                'aria-label':"Default select Project",
+                }
+            )
         }
 
 

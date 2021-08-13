@@ -2,14 +2,21 @@ import random
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-# from .models import ProjectManager, Developer, Task
-from core.models import Ticket,TaskPriority, TaskStatus, Comment,Developer
+# from .models import ProjectManager, Developer, Task, 
+from core.models import Ticket,TaskPriority, TaskStatus, Comment,Developer, Project
 
 
 assign_developers = Developer.objects.all().values_list('username','username')
 dev_list = []
 for item in assign_developers:
     dev_list.append(item)
+
+
+
+project_choices = Project.objects.all().values_list('title','title')
+project_list = []
+for item in project_choices:
+    project_list.append(item)    
 
 
 priority_choices = TaskPriority.objects.all().values_list('name','name')
@@ -31,6 +38,7 @@ class TicketForm(forms.ModelForm):
             'title',
             'description',
             'priority',
+            'project',
         ]
 
         widgets = {
@@ -52,6 +60,12 @@ class TicketForm(forms.ModelForm):
                 'id':'ticketForm3',
                 'aria-label':"Default select Priority",
                 }
+            ),
+            'project': forms.Select(choices=project_list, attrs={
+                'class': 'form-control',
+                'id':'ticketForm4',
+                'aria-label':"Default select Project",
+                }
             )
         }
 
@@ -64,6 +78,7 @@ class TicketEditForm(forms.ModelForm):
             'description',
             'status',
             'priority',
+            'project',
         ]
 
         widgets = {
@@ -92,6 +107,12 @@ class TicketEditForm(forms.ModelForm):
                 'aria-label':"",
                 }
             ),
+            'project': forms.Select(choices=project_list, attrs={
+                'class': 'form-control',
+                'id':'ticketForm5',
+                'aria-label':"",
+                }
+            )
 
         }
 

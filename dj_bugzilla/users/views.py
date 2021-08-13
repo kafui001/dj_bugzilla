@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView, View, TemplateView,DetailView
-from django.contrib.auth import login, logout
+from django.views.generic import FormView,View, TemplateView
+from django.contrib.auth import login
 from django.views import View
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
+# from django.contrib.auth.views import LoginView
+# from django.contrib.auth.forms import AuthenticationForm
 
-# from .forms import UserSignUpForm, LoginForm, AdminForm, PmForm, DevForm
+
 from .forms import UserSignUpForm, LoginForm
 
 from core.models import Administrator, BugUser,Developer, ProjectManager, Notification, Ticket
@@ -48,6 +48,10 @@ class UserLogin(FormView):
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
+
+
+
+
 
 
 
@@ -157,10 +161,16 @@ class AssignDevRoleView(TemplateView):
 
 class AssignAdminRoleView(TemplateView):
     template_name = 'users/assigned_admin_role.html'
-    
 
 
-   
+class ProjectPmRoleView(TemplateView):
+    template_name = 'users/project_pm_Role.html'
+
+
+class PageNotPermittedView(TemplateView):
+    template_name = "users/page_not_permitted.html"
+
+
 
 
     

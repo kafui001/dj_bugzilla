@@ -16,11 +16,13 @@
                     <div
                         class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                         <h3 class="fw-bold mb-0">Projects</h3>
-                        <div class="col-auto d-flex w-sm-100">
-                            <button type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal"
-                                data-bs-target="#tickadd"><i class="icofont-plus-circle me-2 fs-6"></i>Create a 
-                                Project</button>
-                        </div>
+                        {% if user.is_superuser %}
+                            <div class="col-auto d-flex w-sm-100">
+                                <button type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal"
+                                    data-bs-target="#tickadd"><i class="icofont-plus-circle me-2 fs-6"></i>Create a 
+                                    Project</button>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div> <!-- Row end  -->
@@ -38,7 +40,9 @@
                                         <th>END DATE</th>
                                         <th>LEADER</th>
                                         <th>COMPLETION</th>
-                                        <th>ACTIONS</th>
+                                        {% if user.is_project_manager or user.is_superuser %}
+                                            <th>ACTIONS</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 {% for item in project %}
@@ -70,24 +74,23 @@
                                                     <span class="fw-bold ms-1">{{item.completion}}%</span>
                                                 </a>
                                             </td>
-                                            <td>
-                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                    <button type="button" class="btn btn-outline-secondary"><a
-                                                            href="{% url 'project:project_edit' item.pk %}"><i
-                                                                class="icofont-edit text-success"></i></a></button>
-                                                    <button type="button" class="btn btn-outline-secondary deleterow"><a
-                                                            href="{% url 'project:project_delete' item.pk %}"><i
-                                                                class="icofont-ui-delete text-danger"></i></a></button>
-                                                </div>
-                                            </td>
+                                            {% if user.is_project_manager or user.is_superuser %}
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary"><a
+                                                                href="{% url 'project:project_edit' item.pk %}"><i
+                                                                    class="icofont-edit text-success"></i></a></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><a
+                                                                href="{% url 'project:project_delete' item.pk %}"><i
+                                                                    class="icofont-ui-delete text-danger"></i></a></button>
+                                                    </div>
+                                                </td>
+                                            {% endif %}
                                     </tr>
                                 </tbody>
                                 {% endfor%}
                             </table>
                             <div class="row mt-4">
-                                <!-- <div class="col-sm-12 col-md-5">
-                                        <div class="dataTables_info" id="myProjectTable_info" role="status" aria-live="polte">Showing 1 to 6</div>
-                                    </div> -->
                                 <div class="col-sm-12 col-md-7">
                                     <div class="dataTables_paginate paging_simple_numbers" id="myProjectTable_paginate">
                                         {% if is_paginated %}

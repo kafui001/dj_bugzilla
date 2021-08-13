@@ -35,8 +35,10 @@
                                             <th>Subject</th>
                                             <th>Assigned</th> 
                                             <th>Created Date</th> 
-                                            <th>Status</th>   
-                                            <th>Actions</th>  
+                                            <th>Status</th> 
+                                            {% if user.is_project_manager or user.is_superuser %}
+                                                <th>Actions</th> 
+                                            {% endif %}
                                         </tr>
                                     </thead>
                                     {% for item in tickets %}
@@ -67,12 +69,14 @@
                                                     {{item.status}}
                                                 </a>
                                             </td>
-                                            <td>
-                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                    <button type="button" class="btn btn-outline-secondary" ><a href="{% url 'ticket:ticket_edit' item.pk %}"><i class="icofont-edit text-success"></i></a></button>
-                                                    <button type="button" class="btn btn-outline-secondary deleterow"><a href="{% url 'ticket:ticket_delete' item.pk %}"><i class="icofont-ui-delete text-danger"></i></a></button>
-                                                </div>
-                                            </td>
+                                            {% if user.is_project_manager or user.is_superuser %}
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary" ><a href="{% url 'ticket:ticket_edit' item.pk %}"><i class="icofont-edit text-success"></i></a></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><a href="{% url 'ticket:ticket_delete' item.pk %}"><i class="icofont-ui-delete text-danger"></i></a></button>
+                                                    </div>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     </tbody>
                                     {% endfor%}                                    
@@ -300,7 +304,7 @@
                                     {{ form.as_p }}
 
                                     <div class="form-group mt-3">
-                                        <label>add an image (optional)</label>
+                                        <label>add an image ( optional )</label>
                                         <div class="mt-2">
                                             <input name="image" type="file" class="form-control-file">
                                         </div>

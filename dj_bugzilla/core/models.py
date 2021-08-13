@@ -67,6 +67,8 @@ class Task(models.Model):
     priority           = models.CharField(max_length=255)
     project            = models.ForeignKey('Project',on_delete=models.SET_NULL, null=True,blank=True,related_name='task_project')
     
+    def __str__(self):
+        return self.title
 
 class TaskPriority(models.Model):
     name = models.CharField(max_length=255)
@@ -105,6 +107,9 @@ class Project(models.Model):
     project_lead = models.ForeignKey(ProjectManager,on_delete=models.SET_NULL, null=True,blank=True,related_name='project_pm')
     completion   = models.CharField(max_length=255)
 
+
+    def __str__(self):
+        return self.title
         
 
 
@@ -120,7 +125,8 @@ class Ticket(models.Model):
     date_created       = models.DateField(auto_now_add=True)
     date_resolved      = models.DateField(auto_now=True)
                  
-   
+    def __str__(self):
+        return self.title
 
 class AllImage(models.Model):
     ticket = models.ForeignKey(Ticket, related_name='img_ticket', on_delete=models.CASCADE,null=True)
@@ -138,7 +144,7 @@ class Comment(models.Model):
 
 
 class Notification(models.Model):
-    # 1=ticket 2=task 3=project 4=dev_role 5=pm_role 6=admin_role 7=assigned_ticket 8=assigned_task
+    # 1=ticket 2=task 3=project 4=dev_role 5=pm_role 6=admin_role 7=assigned_ticket 8=assigned_task 9=assigned_project
     notification_type    = models.IntegerField()
     to_user              = models.ForeignKey(BugUser, related_name='notification_to',on_delete=models.CASCADE)  
     from_user            = models.ForeignKey(BugUser, related_name='notification_from',on_delete=models.CASCADE)     

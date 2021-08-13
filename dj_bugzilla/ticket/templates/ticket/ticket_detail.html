@@ -22,9 +22,11 @@
                     <div class="border-0 mb-4">
                         <div class="card-header  no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                             <h3 class="fw-bold mb-0" >Ticket Details -- <span class="fw-bold text-secondary">#tc-{{ticket.ticket_id}}</span></h3>
-                            <div class="col-auto d-flex w-sm-100">
-                                <button type="button" class="btn btn-dark btn-set-task w-sm-100 text-white"><a href="{% url 'ticket:ticket_edit' ticket.pk %}" class="text-white">Edit Ticket</a></button>
-                            </div>
+                            {% if user.is_project_manager or user.is_superuser %}
+                                <div class="col-auto d-flex w-sm-100">
+                                    <button type="button" class="btn btn-dark btn-set-task w-sm-100 text-white"><a href="{% url 'ticket:ticket_edit' ticket.pk %}" class="text-white">Edit Ticket</a></button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div> <!-- Row end  -->
@@ -100,8 +102,9 @@
                                         <p>{{ticket.description}}</p>
                                     </div> 
                                 </div>
-
+                                
                                 <div class="modal-content mb-3">
+                                    {% if user.is_project_manager or user.is_superuser %}
                                     <div class="modal-header">
                                         <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Developer</h5>
                                         <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
@@ -132,7 +135,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                   
+                                {% endif %}
                                 </div>
 
                                 <div class="row g-3">
@@ -192,10 +195,10 @@
                                         <div class="col-lg-6 col-md-6">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h6 class="fw-bold mb-3 text-danger">Bug Image Atteched</h6>
+                                                    <h6 class="fw-bold mb-3 text-danger">Bug Image Attached</h6>
                                                     <div class="flex-grow-1">
                                                         <div class="py-2 d-flex align-items-center border-bottom">
-                                                            <div class="d-flex ms-3 align-items-center flex-fill">
+                                                            <!-- <div class="d-flex ms-3 align-items-center flex-fill">
                                                                 <span
                                                                     class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
                                                                         class="icofont-bug fs-5"></i></span>
@@ -203,7 +206,7 @@
                                                                 <div class="d-flex flex-column ps-3">
                                                                     <h6 class="fw-bold mb-0 small-14">Image3.jpg</h6>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
                                                             <button type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#ticket_img">view image</button>
                                                         </div>
                                
