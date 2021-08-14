@@ -10,7 +10,7 @@ USER ROLES
                  changes the role
 
 The key features are:
-1. Ticketing system
+1. Ticketing system -- 
     Users can create a ticket to in response to an issue found that needs to be addressed.
     A notification is sent to the administrator who can respond by assigning it to a developer to help fix the reported issue
 2. Task management system
