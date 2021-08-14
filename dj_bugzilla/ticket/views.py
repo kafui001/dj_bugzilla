@@ -6,8 +6,8 @@ from django.views.generic import ListView, CreateView,FormView, DetailView, Upda
 
 from .forms import TicketForm, TicketEditForm, CommentForm, DeveloperForm
 from core.models import Ticket, Developer, AllImage, Comment,Notification,Administrator
-from core.mixins import SigninRequiredMixin, HigherLevelMixin,PmLevelMixin,DeveloperLevelMixin,SubmitterNotAllowedMixin
-# from users.forms import DevTicketForm
+from core.mixins import SigninRequiredMixin,SubmitterNotAllowedMixin,SubmitterAndDevNotAllowedMixin
+
 
 # Create your views here.
 
@@ -132,7 +132,7 @@ class AssignToView(SigninRequiredMixin,DetailView):
 
 
 
-class TicketEditView(SigninRequiredMixin,UpdateView):
+class TicketEditView(SigninRequiredMixin,SubmitterAndDevNotAllowedMixin,UpdateView):
     model         = Ticket
     form_class    = TicketEditForm
     template_name = 'ticket/ticket_edit.html'
@@ -142,7 +142,7 @@ class TicketEditView(SigninRequiredMixin,UpdateView):
 
 
 
-class TicketDeleteView(SigninRequiredMixin,DeleteView):
+class TicketDeleteView(SigninRequiredMixin,SubmitterAndDevNotAllowedMixin,DeleteView):
     model               = Ticket
     context_object_name = 'ticket'
     template_name       = 'ticket/ticket_delete.html'

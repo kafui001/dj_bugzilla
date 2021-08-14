@@ -11,7 +11,7 @@ class SigninRequiredMixin(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-class HigherLevelMixin(object):
+class OnlyAdminAllowedMixin(object):
     """Verify that the current user is authenticated."""
     def dispatch(self, request, *args, **kwargs):
         print('#######')
@@ -37,11 +37,11 @@ class PmLevelMixin(object):
         return super().dispatch(request, *args, **kwargs)
 
 
-class DeveloperLevelMixin(object):
+class SubmitterAndDevNotAllowedMixin(object):
     """Verify that the current user is authenticated."""
     def dispatch(self, request, *args, **kwargs):
 
-        if not request.user.is_developer:
+        if not request.user.is_project_manager and not request.user.is_superuser:
             return redirect('not_permitted')
         return super().dispatch(request, *args, **kwargs)
 

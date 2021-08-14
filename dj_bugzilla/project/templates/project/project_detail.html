@@ -22,11 +22,13 @@
                         <div
                             class="card-header  no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                             <h3 class="fw-bold mb-0">Project Details</h3>
-                            <div class="col-auto d-flex w-sm-100">
-                                <button type="button" class="btn btn-dark btn-set-task w-sm-100 text-white"><a
-                                        href="{% url 'project:project_edit' project.pk %}" class="text-white">Edit
-                                        Project</a></button>
-                            </div>
+                            {% if user.is_superuser %}
+                                <div class="col-auto d-flex w-sm-100">
+                                    <button type="button" class="btn btn-dark btn-set-task w-sm-100 text-white"><a
+                                            href="{% url 'project:project_edit' project.pk %}" class="text-white">Edit
+                                            Project</a></button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div> <!-- Row end  -->
@@ -127,41 +129,42 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-content mb-3">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Project Manager</h5>
-                                        <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <div class="deadline-form">
-                                            <!-- <form method="POST" action="">
-                                                {% csrf_token %}
-                                                {{ assign_dev.as_p }}
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Assign Ticket</button>
-                                                </div>
-                                            </form> -->
-                                            <form method="POST"
-                                                action="{% url 'project:project_response_form' object.id %}">
-                                                {% csrf_token %}
-
-                                                <select name="pm" class="form-control">
-                                                    <option value='none'>Select a username</option>
-                                                    {% for pm in assign_pm %}
-                                                    <option value='{{ pm.id }}'>{{ pm.username }}</option>
-                                                    {% endfor %}
-                                                </select>
-
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Assign Project</button>
-                                                </div>
-                                            </form>
+                                {% if user.is_superuser %}
+                                    <div class="modal-content mb-3">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Project Manager</h5>
+                                            <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
                                         </div>
+
+                                        <div class="modal-body">
+                                            <div class="deadline-form">
+                                                <!-- <form method="POST" action="">
+                                                    {% csrf_token %}
+                                                    {{ assign_dev.as_p }}
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Assign Ticket</button>
+                                                    </div>
+                                                </form> -->
+                                                <form method="POST"
+                                                    action="{% url 'project:project_response_form' object.id %}">
+                                                    {% csrf_token %}
+
+                                                    <select name="pm" class="form-control">
+                                                        <option value='none'>Select a username</option>
+                                                        {% for pm in assign_pm %}
+                                                        <option value='{{ pm.id }}'>{{ pm.username }}</option>
+                                                        {% endfor %}
+                                                    </select>
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Assign Project</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
                                     </div>
-
-                                </div>
-
+                                {% endif %}
                                 <div class="row g-3">
                                     
 

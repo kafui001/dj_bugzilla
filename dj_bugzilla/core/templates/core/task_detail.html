@@ -22,10 +22,13 @@
                         <div
                             class="card-header  no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                             <h3 class="fw-bold mb-0">Task Details</h3>
+
                             <div class="col-auto d-flex w-sm-100">
-                                <button type="button" class="btn btn-dark btn-set-task w-sm-100 text-white"><a
-                                        href="{% url 'core:task_edit' task.pk %}" class="text-white">Edit
-                                        Task</a></button>
+                                {% if user.is_superuser or user.is_project_manager %}
+                                    <button type="button" class="btn btn-dark btn-set-task w-sm-100 text-white"><a
+                                            href="{% url 'core:task_edit' task.pk %}" class="text-white">Edit
+                                            Task</a></button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -105,13 +108,14 @@
                                         <p>{{task.description}}</p>
                                     </div>
                                 </div>
-
+                                
                                 <div class="modal-content mb-3">
+                                    {% if user.is_superuser or user.is_project_manager %}
                                     <div class="modal-header">
                                         <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Developer</h5>
                                         <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
                                     </div>
-
+                                    
                                     <div class="modal-body">
                                         <div class="deadline-form">
                                             <!-- <form method="POST" action="">
@@ -121,6 +125,7 @@
                                                     <button type="submit" class="btn btn-primary">Assign Ticket</button>
                                                 </div>
                                             </form> -->
+                                            
                                             <form method="POST"
                                                 action="{% url 'core:task_response_form' object.id %}">
                                                 {% csrf_token %}
@@ -138,7 +143,7 @@
                                             </form>
                                         </div>
                                     </div>
-
+                                    {% endif %}
                                 </div>
 
                                 <div class="row g-3">
@@ -210,7 +215,7 @@
                                                     <div class="flex-grow-1">
                                                         <div class="py-2 d-flex align-items-center border-bottom">
                                             
-                                                            <button type="button" class="btn light-danger-bg text-end">Download</button>
+                                                            <h4>Task activity history goes here</h4>
                                                         </div>
                                             
                                                     </div>

@@ -40,7 +40,7 @@
                                         <th>END DATE</th>
                                         <th>LEADER</th>
                                         <th>COMPLETION</th>
-                                        {% if user.is_project_manager or user.is_superuser %}
+                                        {% if user.is_superuser %}
                                             <th>ACTIONS</th>
                                         {% endif %}
                                     </tr>
@@ -74,7 +74,7 @@
                                                     <span class="fw-bold ms-1">{{item.completion}}%</span>
                                                 </a>
                                             </td>
-                                            {% if user.is_project_manager or user.is_superuser %}
+                                            {% if user.is_superuser %}
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                         <button type="button" class="btn btn-outline-secondary"><a

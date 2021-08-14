@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView,View
-from core.mixins import SigninRequiredMixin, HigherLevelMixin
+
 
 # Create your views here.
 from .forms import ProjectForm, ProjectEditForm
+from core.mixins import SigninRequiredMixin, OnlyAdminAllowedMixin,SubmitterAndDevNotAllowedMixin,SubmitterNotAllowedMixin
 from core.models import Ticket, Developer, AllImage, Comment,Notification,Administrator,Project,ProjectManager,Task
 # from users.forms import DevTicketForm
 
 # Create your views here.
 
-class ProjectHomeView(SigninRequiredMixin,ListView):
+class ProjectHomeView(SigninRequiredMixin,SubmitterNotAllowedMixin,ListView):
     model               = Project
     template_name       = 'project/project.html'
     context_object_name = 'project'
@@ -57,7 +58,7 @@ class ProjectFormView(FormView):
         return super(ProjectFormView, self).form_valid(form)
 
 
-class ProjectEditView(SigninRequiredMixin,HigherLevelMixin,UpdateView):
+class ProjectEditView(SigninRequiredMixin,OnlyAdminAllowedMixin,UpdateView):
     model         = Project
     form_class    = ProjectEditForm
     template_name = 'project/project_edit.html'
@@ -66,14 +67,14 @@ class ProjectEditView(SigninRequiredMixin,HigherLevelMixin,UpdateView):
         return reverse_lazy('project:project_detail', kwargs={'pk': self.kwargs['pk']})
 
 
-class ProjectDeleteView(SigninRequiredMixin,HigherLevelMixin,DeleteView):
+class ProjectDeleteView(SigninRequiredMixin,OnlyAdminAllowedMixin,DeleteView):
     model               = Project
     context_object_name = 'project'
     template_name       = 'project/project_delete.html'
     success_url         = reverse_lazy('project:project_home')
 
 
-class ProjectDetailView(SigninRequiredMixin,DetailView):
+class ProjectDetailView(SigninRequiredMixin,SubmitterAndDevNotAllowedMixin,DetailView):
     model               = Project
     context_object_name = 'project'
     template_name       = 'project/project_detail.html'

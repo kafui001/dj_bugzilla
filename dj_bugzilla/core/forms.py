@@ -74,6 +74,7 @@ class TaskEditForm(forms.ModelForm):
            'description',
            'status',
            'priority',
+           'project'
         ]
 
         widgets = {
@@ -102,6 +103,12 @@ class TaskEditForm(forms.ModelForm):
                 'aria-label':"",
                 }
             ),
+            'project': forms.Select(choices=project_list, attrs={
+                'class': 'form-control',
+                'id':'formFileMultipleone',
+                'aria-label':"Default select Project",
+                }
+            )
         }
 
 ##############################################################

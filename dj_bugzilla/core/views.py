@@ -6,12 +6,13 @@ from django.views.generic.list import MultipleObjectMixin
 from django.views.generic import CreateView, FormView, DetailView, UpdateView, DeleteView,View
 from django.urls import reverse_lazy
 
+from .mixins import SigninRequiredMixin, OnlyAdminAllowedMixin,SubmitterAndDevNotAllowedMixin,SubmitterNotAllowedMixin
 from .models import BugUser, Task,Notification,Developer,Administrator, ProjectManager
 from .forms import TaskForm, TaskEditForm
 
 #Create your views here.
 
-class TaskView(FormView):
+class TaskView(SigninRequiredMixin,SubmitterNotAllowedMixin,FormView):
     model = Task
     template_name = 'core/task.html'
     form_class = TaskForm
@@ -42,7 +43,7 @@ class TaskView(FormView):
         
 
 
-class TaskDetailView(DetailView):
+class TaskDetailView(SigninRequiredMixin,SubmitterNotAllowedMixin,DetailView):
     model               = Task
     context_object_name = 'task'
     template_name       = 'core/task_detail.html'
@@ -79,7 +80,7 @@ class AssignTaskView(View):
 
 
 
-class TaskEditView(UpdateView):
+class TaskEditView(SigninRequiredMixin,SubmitterNotAllowedMixin,UpdateView):
     model = Task
     form_class = TaskEditForm
     template_name = 'core/task_edit.html'
@@ -88,7 +89,7 @@ class TaskEditView(UpdateView):
         return reverse_lazy('core:task_detail', kwargs={'pk': self.kwargs['pk']})
 
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(SigninRequiredMixin,SubmitterNotAllowedMixin,DeleteView):
     model = Task
     context_object_name = 'task'
     template_name = 'core/task_delete.html'
@@ -96,16 +97,16 @@ class TaskDeleteView(DeleteView):
 
 
 
-class AssignTaskToView(DetailView):
+class AssignTaskToView(SigninRequiredMixin,SubmitterNotAllowedMixin,DetailView):
     model               = Task
     context_object_name = 'task'
     template_name       = 'core/task_assigned_to.html'
 
 
-class AssignTaskToView(DetailView):
-    model               = Task
-    context_object_name = 'task'
-    template_name       = 'core/task_assigned_to.html'
+# class AssignTaskToView(SigninRequiredMixin,SubmitterNotAllowedMixin,DetailView):
+#     model               = Task
+#     context_object_name = 'task'
+#     template_name       = 'core/task_assigned_to.html'
 
 class DeleteNotification(DeleteView):
     model = Notification

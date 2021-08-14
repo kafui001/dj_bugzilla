@@ -8,7 +8,7 @@ from django.views import View
 
 
 from .forms import UserSignUpForm, LoginForm
-
+from core.mixins import SigninRequiredMixin, OnlyAdminAllowedMixin,SubmitterAndDevNotAllowedMixin,SubmitterNotAllowedMixin
 from core.models import Administrator, BugUser,Developer, ProjectManager, Notification, Ticket
 
 class UserSignUpView(View):
@@ -23,8 +23,8 @@ class UserSignUpView(View):
 
         if form.is_valid():
             # save the user form and log the user in
-            user = form.save(commit=False)
-            user.email = form.cleaned_data["email"]
+            user          = form.save(commit=False)
+            user.email    = form.cleaned_data["email"]
             user.username = form.cleaned_data["username"]
             user.save()
             login(request, user)
@@ -37,11 +37,11 @@ class UserSignUpView(View):
 
 class UserLogin(FormView):
     template_name = "users/signin.html"
-    form_class = LoginForm
+    form_class  = LoginForm
     success_url = reverse_lazy("core:task")
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
+        form     = self.get_form()
         if form.is_valid():
             user = form.get_user()
             login(request, user)
@@ -56,10 +56,10 @@ class UserLogin(FormView):
 
 
 
-class RoleView(View):
+class RoleView(SigninRequiredMixin,SubmitterAndDevNotAllowedMixin,View):
     def get(self, request, *args,**kwargs):
-        non_dev = BugUser.objects.filter(is_developer=False)
-        non_pm = BugUser.objects.filter(is_project_manager=False)
+        non_dev   = BugUser.objects.filter(is_developer=False)
+        non_pm    = BugUser.objects.filter(is_project_manager=False)
         non_admin = BugUser.objects.filter(is_superuser=False)
         context = {
             'non_dev' : non_dev,
@@ -72,7 +72,7 @@ class RoleView(View):
         if self.request.POST['ad'] != 'none':
             ad_id = self.request.POST['ad']
             
-            user = BugUser.objects.get(id=ad_id)
+            user  = BugUser.objects.get(id=ad_id)
             
             for item in Administrator.objects.all():
                 if item != user.id:
@@ -84,9 +84,9 @@ class RoleView(View):
                     )
 
                     Notification.objects.create(
-                        notification_type = 6,
-                        to_user           = user,
-                        from_user         = self.request.user,
+                        notification_type   = 6,
+                        to_user             = user,
+                        from_user           = self.request.user,
                         admin_role_assign   = ad_user
                     )
 
@@ -117,7 +117,7 @@ class PmPostView(View):
                     notification_type = 5,
                     to_user           = user,
                     from_user         = self.request.user,
-                    pm_role_assign   = a_pm_user
+                    pm_role_assign    = a_pm_user
                 )
             
             return redirect('roles_home')
@@ -133,10 +133,10 @@ class DevPostView(View):
             user.save()
             
             dev_assigner = self.request.user
-            assigner = BugUser.objects.get(id=dev_assigner.id)
+            assigner     = BugUser.objects.get(id=dev_assigner.id)
 
             a_user = Developer.objects.create(
-                        username = user,
+                        username    = user,
                         assigner    = assigner
                     )
 
@@ -151,23 +151,23 @@ class DevPostView(View):
         return redirect('roles_home')
 
 
-class AssignPmRoleView(TemplateView):
+class AssignPmRoleView(SigninRequiredMixin,SubmitterAndDevNotAllowedMixin,TemplateView):
     template_name = 'users/assigned_pm_Role.html'
 
 
-class AssignDevRoleView(TemplateView):
+class AssignDevRoleView(SigninRequiredMixin,SubmitterNotAllowedMixin,TemplateView):
     template_name = 'users/assigned_dev_role.html'
 
 
-class AssignAdminRoleView(TemplateView):
+class AssignAdminRoleView(SigninRequiredMixin,OnlyAdminAllowedMixin,TemplateView):
     template_name = 'users/assigned_admin_role.html'
 
 
-class ProjectPmRoleView(TemplateView):
+class ProjectPmRoleView(SigninRequiredMixin,SubmitterNotAllowedMixin,TemplateView):
     template_name = 'users/project_pm_Role.html'
 
 
-class PageNotPermittedView(TemplateView):
+class PageNotPermittedView(SigninRequiredMixin,TemplateView):
     template_name = "users/page_not_permitted.html"
 
 
