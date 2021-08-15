@@ -1,5 +1,5 @@
 
-# dj_bugzilla
+# django bugzilla
 This is a mini application to track a bug through the life cycle of a software development process.
 
 USER ROLES
