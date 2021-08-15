@@ -5,16 +5,8 @@
 {% block content %}
 
 <div id="mytask-layout" class="theme-indigo">
-
-    <!-- sidebar -->
-   
-
     <!-- main body area -->
-    <div class="main px-lg-4 px-md-4"> 
-
-        <!-- Body: Header -->
-        
-
+    <div class="main px-lg-4 px-md-4">
         <!-- Body: Body -->       
         <div class="body d-flex py-lg-3 py-md-2">
             <div class="container-xxl">
@@ -75,22 +67,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- {% if ticket.assigned_to %}
-                            <div class="col-md-3">
-                                <div class="card ">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                                
-                                            <div class="flex-fill ms-4 text-truncate">
-                                                <div class="text-truncate">Assigned To</div>
-                                                <span class="badge bg-warning">{{ticket.assigned_to}}</span>
-                                            </div>
                             
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %} -->
                         </div> <!-- Row end  -->
                         <div class="row g-3">
                             <div class="col-md-12">
@@ -107,18 +84,11 @@
                                     {% if user.is_project_manager or user.is_superuser %}
                                     <div class="modal-header">
                                         <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Developer</h5>
-                                        <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
                                     </div>
                                     
                                     <div class="modal-body">
                                         <div class="deadline-form">
-                                            <!-- <form method="POST" action="">
-                                                {% csrf_token %}
-                                                {{ assign_dev.as_p }}
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Assign Ticket</button>
-                                                </div>
-                                            </form> -->
+                                            </form> 
                                             <form method="POST" action="{% url 'ticket:ticket_response_form' object.id %}">
                                                 {% csrf_token %}
                                             
@@ -172,9 +142,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <!-- {% if ticket.assigned_to == False %} -->
-                                    <!-- <div class="col-md-2"> -->
                                         <div class="card ">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
@@ -186,9 +153,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    <!-- </div> -->
-                                    <!-- {% endif %} -->
-                                        
                                     <!-- ##### -->
 
                                     <div class="row g-3">
@@ -198,15 +162,6 @@
                                                     <h6 class="fw-bold mb-3 text-danger">Bug Image Attached</h6>
                                                     <div class="flex-grow-1">
                                                         <div class="py-2 d-flex align-items-center border-bottom">
-                                                            <!-- <div class="d-flex ms-3 align-items-center flex-fill">
-                                                                <span
-                                                                    class="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center"><i
-                                                                        class="icofont-bug fs-5"></i></span>
-                                                                        
-                                                                <div class="d-flex flex-column ps-3">
-                                                                    <h6 class="fw-bold mb-0 small-14">Image3.jpg</h6>
-                                                                </div>
-                                                            </div> -->
                                                             <button type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#ticket_img">view image</button>
                                                         </div>
                                
@@ -238,14 +193,12 @@
                                         <div class="card mb-2">
                                             <div class="card-body">
                                                 <div class="post">
-                                                    <!-- <textarea class="form-control" placeholder="Post" rows="4"></textarea> -->
                                                     
                                                     <form method="POST" action="{% url 'ticket:comment_form' object.id %}">
                                                         {% csrf_token %}
                                                         {{ comment_form.as_p }}
-                                                        <!-- <div class="modal-footer"> -->
                                                             <button type="submit" class="btn btn-primary float-sm-end  mt-2 mt-sm-0">Post</button>
-                                                        <!-- </div> -->
+                                                       
                                                     </form>
                                                     
                                                 </div>
@@ -288,8 +241,6 @@
         </div>
         <div class="modal fade" id="ticket_img" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <!-- <div class="modal-dialog modal-lg"> -->
-
                 <div class="modal-content"> 
                     <div class="modal-header">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -308,18 +259,7 @@
                 </div>
             </div> 
         </div>
-        
-        <!-- Modal Members-->
-        <!--   -->
-        
     </div>
 </div>
- 
-<!-- Jquery Core Js -->
-<script src="assets/bundles/libscripts.bundle.js"></script>
-
-
-<!-- Jquery Page Js -->
-<script src="../js/template.js"></script>
 {% endblock content %}
 

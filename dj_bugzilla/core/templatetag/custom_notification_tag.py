@@ -1,5 +1,6 @@
 from django import template
 from core.models import Notification
+
 # template_tag is registered in dj_bugs/settings.py under TEMPLATES
 register = template.Library()
 

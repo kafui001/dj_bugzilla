@@ -34,7 +34,7 @@
                             {% csrf_token %}
                             <h4>this action will permanently delete...</h4> 
                             <h5 class="text-danger">...{{ task.title }}</h5>
-                            <!-- <h3>{{ task.title }}</h3> -->
+                            
                             <i class="icofont-ui-delete text-danger display-2 text-center mt-2 mb-4"></i>
                             
                             </div>
@@ -51,14 +51,4 @@
     </div>
 
 </div>
-
-<!-- Jquery Core Js -->
-<script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
-
-<!-- Plugin Js-->
-<script src="{% static 'assets/bundles/dataTables.bundle.js' %}"></script>
-
-<!-- Jquery Page Js -->
-<script src="{% static 'js/template.js' %}"></script>
-
 {% endblock content %}

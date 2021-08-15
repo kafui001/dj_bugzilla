@@ -1,10 +1,10 @@
 import random
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView,View
 
-from .forms import TicketForm, TicketEditForm, CommentForm, DeveloperForm
+from .forms import TicketForm, TicketEditForm, CommentForm
 from core.models import Ticket, Developer, AllImage, Comment,Notification,Administrator
 from core.mixins import SigninRequiredMixin,SubmitterNotAllowedMixin,SubmitterAndDevNotAllowedMixin
 
@@ -33,7 +33,6 @@ class TicketFormView(FormView):
         form         = TicketForm(self.request.POST)
         new_image    = self.request.FILES.get('image') 
 
-        print(form)
         form         = form.save(commit=False)
         form.creator = self.request.user
         form.status  = 'open'

@@ -5,14 +5,8 @@
 
 <div id="mytask-layout" class="theme-indigo">
 
-    <!-- sidebar -->
-
-
     <!-- main body area -->
     <div class="main px-lg-4 px-md-4">
-
-        <!-- Body: Header -->
-
 
         <!-- Body: Body -->
         <div class="body d-flex py-lg-3 py-md-2">
@@ -81,22 +75,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- {% if ticket.assigned_to %}
-                            <div class="col-md-3">
-                                <div class="card ">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                                
-                                            <div class="flex-fill ms-4 text-truncate">
-                                                <div class="text-truncate">Assigned To</div>
-                                                <span class="badge bg-warning">{{ticket.assigned_to}}</span>
-                                            </div>
-                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %} -->
                         </div> <!-- Row end  -->
                         <div class="row g-3">
                             <div class="col-md-12">
@@ -113,19 +91,10 @@
                                     {% if user.is_superuser or user.is_project_manager %}
                                     <div class="modal-header">
                                         <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Developer</h5>
-                                        <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
                                     </div>
                                     
                                     <div class="modal-body">
                                         <div class="deadline-form">
-                                            <!-- <form method="POST" action="">
-                                                {% csrf_token %}
-                                                {{ assign_dev.as_p }}
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Assign Ticket</button>
-                                                </div>
-                                            </form> -->
-                                            
                                             <form method="POST"
                                                 action="{% url 'core:task_response_form' object.id %}">
                                                 {% csrf_token %}
@@ -166,9 +135,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- {% if ticket.assigned_to == False %} -->
-                                    <!-- <div class="col-md-2"> -->
                                     <div class="card ">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
@@ -180,14 +146,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- </div> -->
-                                    <!-- {% endif %} -->
-
-                                    <!-- ##### -->
-
-                                    
-
-
+                                   
                                 </div>
                             </div>
                         </div> <!-- Row end  -->
@@ -211,7 +170,6 @@
 
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <!-- <h6 class="fw-bold mb-3 text-danger">Task History</h6> -->
                                                     <div class="flex-grow-1">
                                                         <div class="py-2 d-flex align-items-center border-bottom">
                                             
@@ -244,11 +202,4 @@
 
     </div>
 </div>
-
-<!-- Jquery Core Js -->
-<script src="assets/bundles/libscripts.bundle.js"></script>
-
-
-<!-- Jquery Page Js -->
-<script src="../js/template.js"></script>
 {% endblock content %}

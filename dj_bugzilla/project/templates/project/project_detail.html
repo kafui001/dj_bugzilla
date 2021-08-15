@@ -4,16 +4,8 @@
 {% block content %}
 
 <div id="mytask-layout" class="theme-indigo">
-
-    <!-- sidebar -->
-
-
     <!-- main body area -->
     <div class="main px-lg-4 px-md-4">
-
-        <!-- Body: Header -->
-
-
         <!-- Body: Body -->
         <div class="body d-flex py-lg-3 py-md-2">
             <div class="container-xxl">
@@ -80,22 +72,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- {% if ticket.assigned_to %}
-                            <div class="col-md-3">
-                                <div class="card ">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                                
-                                            <div class="flex-fill ms-4 text-truncate">
-                                                <div class="text-truncate">Assigned To</div>
-                                                <span class="badge bg-warning">{{ticket.assigned_to}}</span>
-                                            </div>
-                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %} -->
                         </div> <!-- Row end  -->
                         <div class="row g-3">
                             <div class="col-md-12">
@@ -103,7 +79,7 @@
                                     <div class="card-body">
 
                                         <h4 class="fw-bold mb-3 text-danger">{{project.title}}</h4>
-                                        <!-- <h5>Project Description</h5> -->
+                                        
                                         <p>{{project.description}}</p>
                                     </div>
                                 </div>
@@ -133,18 +109,11 @@
                                     <div class="modal-content mb-3">
                                         <div class="modal-header">
                                             <h5 class="modal-title  fw-bold" id="edittickitLabel">Assign To A Project Manager</h5>
-                                            <!-- <a href="#" class="btn btn-primary">Switch Assigned Developer</a> -->
+                                            
                                         </div>
 
                                         <div class="modal-body">
                                             <div class="deadline-form">
-                                                <!-- <form method="POST" action="">
-                                                    {% csrf_token %}
-                                                    {{ assign_dev.as_p }}
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary">Assign Ticket</button>
-                                                    </div>
-                                                </form> -->
                                                 <form method="POST"
                                                     action="{% url 'project:project_response_form' object.id %}">
                                                     {% csrf_token %}
@@ -185,9 +154,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- {% if ticket.assigned_to == False %} -->
-                                    <!-- <div class="col-md-2"> -->
                                     <div class="card ">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
@@ -199,14 +165,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- </div> -->
-                                    <!-- {% endif %} -->
-
-                                    <!-- ##### -->
-
-                                    
-
-
                                 </div>
                             </div>
                         </div> <!-- Row end  -->
@@ -231,20 +189,12 @@
                                             <div class="card">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <!-- <h6 class="fw-bold mb-3 text-danger">Task History</h6> -->
-                                                        <!-- <div class="flex-grow-1"> -->
-                                                        <!-- <div class="py-2 d-flex align-items-center border-bottom"> -->
-                                                
-                                                
                                                         <div class="list-group">
                                                             {% for item in task %}
                                                                 <a href="{% url 'core:task_detail' item.pk %}" class="font-weight-light">{{ item.title}}</a>
                                                                 <div class="dividers-block"></div>
                                                             {% endfor %}
                                                         </div>
-                                                        <!-- </div> -->
-                                                
-                                                        <!-- </div> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -262,20 +212,12 @@
                                     
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <!-- <h6 class="fw-bold mb-3 text-danger">Task History</h6> -->
-                                                    <!-- <div class="flex-grow-1"> -->
-                                                        <!-- <div class="py-2 d-flex align-items-center border-bottom"> -->
-                                    
-                                                            
                                                             <div class="list-group">
                                                                 {% for item in ticket %}
                                                                     <a href="{% url 'ticket:ticket_detail' item.pk %}" class="font-weight-light">{{ item.title}}</a>
                                                                     <div class="dividers-block"></div>
                                                                 {% endfor %}
                                                             </div>
-                                                        <!-- </div> -->
-                                    
-                                                    <!-- </div> -->
                                                 </div>
                                             </div>
                                     
@@ -300,11 +242,4 @@
 
     </div>
 </div>
-
-<!-- Jquery Core Js -->
-<script src="assets/bundles/libscripts.bundle.js"></script>
-
-
-<!-- Jquery Page Js -->
-<script src="../js/template.js"></script>
 {% endblock content %}

@@ -1,14 +1,10 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-    <!-- sidebar -->
    {% block content %}
 
     <!-- main body area -->
     <div class="main px-lg-4 px-md-4"> 
-
-        <!-- Body: Header -->
-
         <!-- Body: Body -->       
         <div class="body d-flex py-lg-3 py-md-2">
             <div class="container-xxl">
@@ -82,9 +78,6 @@
                                     {% endfor%}                                    
                                 </table>
                                 <div class="row mt-4">
-                                    <!-- <div class="col-sm-12 col-md-5">
-                                        <div class="dataTables_info" id="myProjectTable_info" role="status" aria-live="polte">Showing 1 to 6</div>
-                                    </div> -->
                                     <div class="col-sm-12 col-md-7">
                                         <div class="dataTables_paginate paging_simple_numbers" id="myProjectTable_paginate">
                                             {% if is_paginated %}

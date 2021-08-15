@@ -15,7 +15,7 @@
                             <div class='justify-content-center flex-column d-flex'>
                             {% csrf_token %}
                             <h4>this action will permanently delete... <span class="text-danger">{{ ticket.title }}</span></h4>
-                            <!-- <h3>{{ task.title }}</h3> -->
+                            
                             <i class="icofont-ui-delete text-danger display-2 text-center mt-2 mb-4"></i>
                         </div>
                             <div class="modal-footer">
@@ -31,14 +31,5 @@
     </div>
 
 </div>
-
-<!-- Jquery Core Js -->
-<script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
-
-<!-- Plugin Js-->
-<script src="{% static 'assets/bundles/dataTables.bundle.js' %}"></script>
-
-<!-- Jquery Page Js -->
-<script src="{% static 'js/template.js' %}"></script>
 
 {% endblock content %}

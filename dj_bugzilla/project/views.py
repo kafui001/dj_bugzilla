@@ -1,13 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView,FormView, DetailView, UpdateView, DeleteView,View
+from django.views.generic import ListView,FormView, DetailView, UpdateView, DeleteView,View
 
 
-# Create your views here.
 from .forms import ProjectForm, ProjectEditForm
 from core.mixins import SigninRequiredMixin, OnlyAdminAllowedMixin,SubmitterAndDevNotAllowedMixin,SubmitterNotAllowedMixin
-from core.models import Ticket, Developer, AllImage, Comment,Notification,Administrator,Project,ProjectManager,Task
-# from users.forms import DevTicketForm
+from core.models import Ticket,Notification,Administrator,Project,ProjectManager,Task
+
 
 # Create your views here.
 

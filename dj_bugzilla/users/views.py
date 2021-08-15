@@ -3,13 +3,11 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView,View, TemplateView
 from django.contrib.auth import login
 from django.views import View
-# from django.contrib.auth.views import LoginView
-# from django.contrib.auth.forms import AuthenticationForm
 
 
 from .forms import UserSignUpForm, LoginForm
 from core.mixins import SigninRequiredMixin, OnlyAdminAllowedMixin,SubmitterAndDevNotAllowedMixin,SubmitterNotAllowedMixin
-from core.models import Administrator, BugUser,Developer, ProjectManager, Notification, Ticket
+from core.models import Administrator, BugUser,Developer, ProjectManager, Notification
 
 class UserSignUpView(View):
     
@@ -91,8 +89,6 @@ class RoleView(SigninRequiredMixin,SubmitterAndDevNotAllowedMixin,View):
                     )
 
                     return redirect('roles_home')
-
-                
             return redirect('roles_home')
 
 
