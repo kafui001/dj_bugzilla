@@ -26,3 +26,4 @@ TECHNOLOGY STACK:
 5. Bootstrap
 6. PostgreSQL
 7. AWS ( s3 )
+8. AWS ( RDS )
